@@ -44,6 +44,7 @@ export function useChatExcel() {
   const [analyzing, setAnalyzing] = useState(false);
   const [executing, setExecuting] = useState(false);
   const [pyodideReady, setPyodideReady] = useState(false);
+  const [proMode, setProMode] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const pendingFiles = useRef<Record<string, PendingFile>>({});
 
@@ -343,7 +344,8 @@ export function useChatExcel() {
                 fileType: file.fileType
               };
               return acc;
-            }, {} as Record<string, { dtypes: Record<string, string>; fileType: 'csv' | 'xlsx' | 'xls' }>)
+            }, {} as Record<string, { dtypes: Record<string, string>; fileType: 'csv' | 'xlsx' | 'xls' }>),
+            mode: proMode ? 'pro' : 'basic'
           } as AnalysisRequest)
         }).then(res => res.json() as Promise<ApiResponse<AssistantResponse>>),
         initializePyodide()
@@ -519,6 +521,8 @@ export function useChatExcel() {
     executing,
     pyodideReady,
     analysisResult,
+    proMode,
+    setProMode,
     handleFileUpload,
     handleFileDelete,
     executeAnalysis

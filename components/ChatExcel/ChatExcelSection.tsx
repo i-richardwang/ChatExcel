@@ -12,6 +12,8 @@ export function ChatExcelSection() {
     analyzing,
     executing,
     analysisResult,
+    proMode,
+    setProMode,
     handleFileUpload,
     handleFileDelete,
     executeAnalysis
@@ -66,6 +68,8 @@ export function ChatExcelSection() {
             files={uploadedFiles}
             disabled={analyzing || executing}
             analyzing={analyzing}
+            proMode={proMode}
+            onProModeChange={setProMode}
           />
 
           <ExecutionResult

@@ -6,6 +6,8 @@ export interface AnalysisRequest {
   user_input: string;
   /** 表格信息，key为文件名 */
   table_info: Record<string, FileInfo>;
+  /** 使用的模式：basic使用基础模型，pro使用高级模型 */
+  mode?: 'basic' | 'pro';
 }
 
 /**

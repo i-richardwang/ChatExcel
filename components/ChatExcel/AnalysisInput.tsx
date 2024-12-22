@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 
 const EXAMPLE_PROMPTS = [
   {
@@ -42,6 +43,8 @@ interface AnalysisInputProps {
   disabled?: boolean;
   analyzing?: boolean;
   onFileDelete: (fileName: string) => void;
+  proMode: boolean;
+  onProModeChange: (checked: boolean) => void;
 }
 
 export function AnalysisInput({
@@ -50,7 +53,9 @@ export function AnalysisInput({
   files,
   disabled = false,
   analyzing = false,
-  onFileDelete
+  onFileDelete,
+  proMode,
+  onProModeChange
 }: AnalysisInputProps) {
   const [input, setInput] = useState('');
   const [isDragging, setIsDragging] = useState(false);
@@ -221,18 +226,29 @@ export function AnalysisInput({
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <Button
-                size="sm"
-                onClick={handleSubmit}
-                disabled={disabled || analyzing || !input.trim()}
-                className="h-8 px-3 shadow-none bg-[#0d9488] hover:bg-[#0d9488]/90 text-white"
-              >
-                {analyzing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <ArrowRight className="h-4 w-4" />
-                )}
-              </Button>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Pro Mode</span>
+                  <Switch
+                    checked={proMode}
+                    onCheckedChange={onProModeChange}
+                    disabled={analyzing}
+                    className="data-[state=checked]:bg-[#0d9488] data-[state=checked]:hover:bg-[#0d9488]/90"
+                  />
+                </div>
+                <Button
+                  size="sm"
+                  onClick={handleSubmit}
+                  disabled={disabled || analyzing || !input.trim()}
+                  className="h-8 px-3 shadow-none bg-[#0d9488] hover:bg-[#0d9488]/90 text-white"
+                >
+                  {analyzing ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
 

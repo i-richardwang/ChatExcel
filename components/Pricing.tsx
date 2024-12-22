@@ -3,8 +3,14 @@
 import config from "@/config";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, HelpCircle } from "lucide-react";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import ButtonCheckout from "./ButtonCheckout";
@@ -110,6 +116,18 @@ const Pricing = () => {
                   <li key={i} className="flex items-center gap-3">
                     <Check className="w-5 h-5 text-green-500" />
                     <span className="text-muted-foreground">{feature.name}</span>
+                    {'tooltip' in feature && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <HelpCircle className="w-4 h-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="w-[200px] text-sm">{feature.tooltip}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
                   </li>
                 ))}
               </ul>

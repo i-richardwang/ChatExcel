@@ -1,32 +1,29 @@
-import Image from "next/image";
-import config from "@/config";
+"use client";
+
+import Section from "@/components/section";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/libs/utils";
+import Link from "next/link";
 
 const CTA = () => {
   return (
-    <section className="relative hero overflow-hidden min-h-screen">
-      <Image
-        src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3540&q=80"
-        alt="Background"
-        className="object-cover w-full"
-        fill
-      />
-      <div className="relative hero-overlay bg-neutral bg-opacity-70"></div>
-      <div className="relative hero-content text-center text-neutral-content p-8">
-        <div className="flex flex-col items-center max-w-xl p-8 md:p-0">
-          <h2 className="font-bold text-3xl md:text-5xl tracking-tight mb-8 md:mb-12">
-            Boost your app, launch, earn
-          </h2>
-          <p className="text-lg opacity-80 mb-12 md:mb-16">
-            Don&apos;t waste time integrating APIs or designing a pricing
-            section...
-          </p>
-
-          <button className="btn btn-primary btn-wide">
-            Get {config.appName}
-          </button>
-        </div>
+    <Section
+      title="Ready to Transform Your Excel Workflow?"
+      subtitle="Join thousands of professionals who've automated their daily Excel tasks."
+      className="bg-green-500/10 rounded-xl py-16"
+    >
+      <div className="flex flex-col w-full sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 pt-4">
+        <Link
+          href="/signup"
+          className={cn(
+            buttonVariants({ variant: "default" }),
+            "w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white flex gap-2 py-6 text-lg font-semibold"
+          )}
+        >
+          Get Started Now
+        </Link>
       </div>
-    </section>
+    </Section>
   );
 };
 

@@ -42,6 +42,7 @@ export interface ConfigProps {
       isFeatured?: boolean;
       features: {
         name: string;
+        tooltip?: string;
       }[];
     }[];
   };

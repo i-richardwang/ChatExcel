@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import ButtonSignin from "./ButtonSignin";
+import ButtonTry from "./ButtonTry";
 import logo from "@/app/icon.svg";
 import config from "@/config";
 import { cn } from "@/libs/utils";
@@ -150,14 +151,15 @@ const Header = () => {
         </div>
 
         <motion.div
-          className="z-[999] hidden items-center md:flex"
+          className="z-[999] hidden items-center md:flex gap-4"
           animate={{
             y: scrollY >= 120 ? -50 : 0,
             opacity: scrollY >= 120 ? 0 : 1,
           }}
           transition={{ duration: 0.15 }}
         >
-          <ButtonSignin extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
+          <ButtonSignin extraStyle="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-foreground rounded-full border border-gray-300" />
+          <ButtonTry extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
         </motion.div>
 
         <MotionConfig transition={{ duration: 0.3, ease: "easeInOut" }}>
@@ -268,8 +270,9 @@ const Header = () => {
                 </div>
               </div>
               <div className="divider" />
-              <div className="flex flex-col">
-                <ButtonSignin extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
+              <div className="flex flex-col gap-4">
+                <ButtonSignin extraStyle="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-foreground rounded-full border border-gray-300" />
+                <ButtonTry extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
               </div>
             </div>
           </div>

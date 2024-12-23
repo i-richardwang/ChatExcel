@@ -6,6 +6,8 @@ import WordRotate from "@/components/ui/word-rotate";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { cn } from "@/libs/utils";
+import ButtonSignin from "./ButtonSignin";
+import ButtonTry from "./ButtonTry";
 
 const Hero = () => {
   const fadeInRef = useRef(null);
@@ -90,16 +92,18 @@ const Hero = () => {
               ease: [0.21, 0.47, 0.32, 0.98],
               type: "spring",
             }}
+            className="flex gap-4"
           >
-            <button
-              className={cn(
-                "bg-black text-white shadow hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90",
-                "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
-                "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
-              )}
-            >
-              Try {config.appName} Now
-            </button>
+            <ButtonSignin extraStyle={cn(
+              "bg-transparent text-foreground shadow hover:bg-gray-100 dark:hover:bg-gray-800",
+              "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
+              "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
+            )} />
+            <ButtonTry extraStyle={cn(
+              "bg-black text-white shadow hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90",
+              "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
+              "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
+            )} />
           </motion.div>
 
           <motion.div

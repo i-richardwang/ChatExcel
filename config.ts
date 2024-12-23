@@ -22,8 +22,12 @@ const config = {
         // REQUIRED — we use this to find the plan in the webhook (for instance if you want to update the user's credits based on the plan)
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1QXQN8BZOyB4SFLpUiPuBdXn"
+            ? "price_1QZDyWBZOyB4SFLpDR0sSfz0"
             : "price_456",
+        yearlyPriceId:
+          process.env.NODE_ENV === "development"
+            ? "price_1QZDyoBZOyB4SFLpX7VR2aQV"  // This should be your actual yearly price ID
+            : "price_457",
         //  REQUIRED - Name of the plan, displayed on the pricing page
         name: "Basic",
         // A friendly description of the plan, displayed on the pricing page. Tip: explain why this plan and not others
@@ -46,6 +50,10 @@ const config = {
           process.env.NODE_ENV === "development"
             ? "price_1O5KtcAxyNprDp7iftKnrrpw"
             : "price_456",
+        yearlyPriceId:
+          process.env.NODE_ENV === "development"
+            ? "price_1O5KtcAxyNprDp7iftKnYrly"  // This should be your actual yearly price ID
+            : "price_458",
         // This plan will look different on the pricing page, it will be highlighted. You can only have one plan with isFeatured: true
         isFeatured: true,
         name: "Pro",
@@ -70,6 +78,7 @@ const config = {
           process.env.NODE_ENV === "development"
             ? "price_1O5KtcAxyNprDp7iftKnrrpw"
             : "price_456",
+        // No yearly price ID needed for lifetime plan since it's a one-time payment
         name: "Lifetime",
         description: "Limited to first 500 early supporters",
         price: 499,

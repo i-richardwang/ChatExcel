@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { useUser, useClerk } from '@clerk/nextjs';
 import apiClient from "@/libs/api";
+import ButtonSignin from "./ButtonSignin";
 
 // A button to show user some account actions
 //  1. Billing: open a Stripe Customer Portal to manage their billing (cancel subscription, update payment method, etc.).
@@ -43,6 +44,15 @@ const ButtonAccount = () => {
 
   if (!isLoaded) {
     return null;
+  }
+
+  // If user is not logged in, show sign in button
+  if (!user) {
+    return (
+      <ButtonSignin 
+        extraStyle="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-foreground rounded-full border border-gray-300" 
+      />
+    );
   }
 
   return (

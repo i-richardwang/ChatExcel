@@ -133,7 +133,7 @@ const Pricing = () => {
               </ul>
 
               <ButtonCheckout
-                priceId={plan.priceId}
+                priceId={isMonthly ? plan.priceId : (plan.yearlyPriceId || plan.priceId)}
                 mode={plan.name === "Lifetime" ? "payment" : "subscription"}
                 className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 ${
                   plan.isFeatured

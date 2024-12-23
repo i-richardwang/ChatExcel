@@ -8,8 +8,10 @@ import { useRef } from "react";
 import { cn } from "@/libs/utils";
 import ButtonSignin from "./ButtonSignin";
 import ButtonTry from "./ButtonTry";
+import { useUser } from '@clerk/nextjs';
 
 const Hero = () => {
+  const { isLoaded, user } = useUser();
   const fadeInRef = useRef(null);
   const fadeInInView = useInView(fadeInRef, {
     once: true,
@@ -57,7 +59,6 @@ const Hero = () => {
               words={[
                 "Tedious VLOOKUP",
                 "Pivot Tables",
-                // "Manual Formatting",
                 "Data Cleaning",
                 "Chart Tweaking",
                 "Formula Errors",
@@ -94,16 +95,26 @@ const Hero = () => {
             }}
             className="flex gap-4"
           >
-            <ButtonSignin extraStyle={cn(
-              "bg-transparent text-foreground shadow hover:bg-gray-100 dark:hover:bg-gray-800",
-              "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
-              "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
-            )} />
-            <ButtonTry extraStyle={cn(
-              "bg-black text-white shadow hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90",
-              "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
-              "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
-            )} />
+            {!isLoaded ? null : user ? (
+              <ButtonTry extraStyle={cn(
+                "bg-black text-white shadow hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90",
+                "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
+                "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
+              )} />
+            ) : (
+              <>
+                <ButtonSignin extraStyle={cn(
+                  "bg-transparent text-foreground shadow hover:bg-gray-100 dark:hover:bg-gray-800",
+                  "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
+                  "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
+                )} />
+                <ButtonTry extraStyle={cn(
+                  "bg-black text-white shadow hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90",
+                  "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
+                  "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
+                )} />
+              </>
+            )}
           </motion.div>
 
           <motion.div

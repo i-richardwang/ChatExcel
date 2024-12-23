@@ -142,7 +142,7 @@ const Header = () => {
                     transition={{ ease: "linear", duration: 0.3 }}
                     className="shrink-0 whitespace-nowrap pl-8"
                   >
-                    <ButtonSignin extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
+                    <ButtonTry text="Go to Dashboard" extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -159,7 +159,7 @@ const Header = () => {
           transition={{ duration: 0.15 }}
         >
           <ButtonSignin extraStyle="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-foreground rounded-full border border-gray-300" />
-          <ButtonTry extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
+          <ButtonTry text="Go to Dashboard" extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
         </motion.div>
 
         <MotionConfig transition={{ duration: 0.3, ease: "easeInOut" }}>
@@ -272,7 +272,7 @@ const Header = () => {
               <div className="divider" />
               <div className="flex flex-col gap-4">
                 <ButtonSignin extraStyle="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-foreground rounded-full border border-gray-300" />
-                <ButtonTry extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
+                <ButtonTry text="Go to Dashboard" extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
               </div>
             </div>
           </div>

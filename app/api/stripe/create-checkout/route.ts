@@ -55,6 +55,32 @@ export async function POST(req: NextRequest) {
       .eq("id", userId)
       .single();
 
+    // 获取用户当前订阅状态
+    const { data: userData } = await supabase
+      .from("users")
+      .select("subscription_tier, subscription_status")
+      .eq("id", userId)
+      .single();
+
+    // 如果用户已经有 lifetime 订阅，不允许再次购买
+    if (userData?.subscription_tier === 'lifetime') {
+      return NextResponse.json(
+        { error: "You already have a lifetime subscription." },
+        { status: 400 }
+      );
+    }
+
+    // 如果用户有活跃的订阅，且尝试购买新的订阅，提示先取消当前订阅
+    if (
+      userData?.subscription_status === 'active' && 
+      body.mode === 'subscription'
+    ) {
+      return NextResponse.json(
+        { error: "Please cancel your current subscription before starting a new one." },
+        { status: 400 }
+      );
+    }
+
     const { priceId, mode, successUrl, cancelUrl } = body;
 
     const stripeSessionURL = await createCheckout({

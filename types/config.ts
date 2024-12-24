@@ -33,6 +33,7 @@ export interface ConfigProps {
   stripe: {
     plans: {
       priceId: string;
+      yearlyPriceId?: string;
       name: string;
       description?: string;
       price: number;

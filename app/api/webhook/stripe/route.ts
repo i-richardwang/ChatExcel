@@ -66,7 +66,12 @@ export async function POST(req: NextRequest) {
           .update({
             customer_id: customerId,
             price_id: priceId,
-            has_access: true,
+            subscription_tier: plan.name.toLowerCase(),
+            subscription_status: 'active',
+            subscription_start_date: new Date().toISOString(),
+            subscription_end_date: stripeObject.mode === 'subscription' ? 
+              new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() : // 30天后
+              null // lifetime 计划不需要结束时间
           })
           .eq("id", userId);
 
@@ -98,7 +103,10 @@ export async function POST(req: NextRequest) {
         // Revoke access in Supabase
         await supabase
           .from("users")
-          .update({ has_access: false })
+          .update({ 
+            subscription_status: 'canceled',
+            subscription_end_date: new Date().toISOString()
+          })
           .eq("customer_id", subscription.customer);
 
         break;
@@ -125,7 +133,10 @@ export async function POST(req: NextRequest) {
         // Grant access in Supabase
         await supabase
           .from("users")
-          .update({ has_access: true })
+          .update({ 
+            subscription_status: 'active',
+            subscription_end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 续费后延长30天
+          })
           .eq("customer_id", customerId);
 
         break;

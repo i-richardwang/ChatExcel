@@ -76,6 +76,8 @@ export async function POST(req: Request) {
           id,
           email,
           clerk_data: attributes,
+          subscription_tier: 'none',  // 新用户默认无订阅
+          subscription_status: 'incomplete',
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'id'

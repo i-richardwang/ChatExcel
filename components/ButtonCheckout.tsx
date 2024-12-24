@@ -3,6 +3,7 @@
 import { useState } from "react";
 import apiClient from "@/libs/api";
 import config from "@/config";
+import { useUser, SignInButton } from '@clerk/nextjs';
 
 // This component is used to create Stripe Checkout Sessions
 // It calls the /api/stripe/create-checkout route with the priceId, successUrl and cancelUrl
@@ -17,6 +18,7 @@ interface ButtonCheckoutProps {
 
 const ButtonCheckout = ({ priceId, mode = "subscription", className, children }: ButtonCheckoutProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isSignedIn } = useUser();
 
   const handlePayment = async () => {
     setIsLoading(true);
@@ -40,6 +42,18 @@ const ButtonCheckout = ({ priceId, mode = "subscription", className, children }:
     setIsLoading(false);
   };
 
+  // 如果用户未登录，显示登录按钮
+  if (!isSignedIn) {
+    return (
+      <SignInButton mode="modal">
+        <button className={`btn ${className}`}>
+          {children}
+        </button>
+      </SignInButton>
+    );
+  }
+
+  // 用户已登录，显示正常的支付按钮
   return (
     <button
       onClick={handlePayment}

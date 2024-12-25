@@ -1,10 +1,13 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { AnalysisInput } from './AnalysisInput';
 import { ExecutionResult } from './ExecutionResult';
+import { UsageQuota } from './UsageQuota';
 import { useChatExcel } from '@/hooks/use-chatexcel';
+import { useQuota } from '@/hooks/use-quota';
 import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@clerk/nextjs';
 
 export function ChatExcelSection() {
   const {
@@ -19,48 +22,108 @@ export function ChatExcelSection() {
     executeAnalysis
   } = useChatExcel();
 
-  const { toast } = useToast();
+  const {
+    basicQuota,
+    proQuota,
+    checkQuota,
+    refreshQuota,
+  } = useQuota();
 
+  const { toast } = useToast();
+  const { isSignedIn } = useUser();
+
+  // 在组件加载时检查配额
+  useEffect(() => {
+    refreshQuota();
+  }, [refreshQuota]);
+
+  // 文件上传处理
   const handleUpload = useCallback(async (files: FileList) => {
     try {
       await handleFileUpload(files);
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "上传失败",
-        description: error instanceof Error ? error.message : "文件上传失败"
+        title: "Upload failed",
+        description: error instanceof Error ? error.message : "Failed to upload files"
       });
     }
   }, [handleFileUpload, toast]);
 
+  // 文件删除处理
   const handleDelete = useCallback((fileName: string) => {
     try {
       handleFileDelete(fileName);
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "删除失败",
-        description: "文件删除失败，请重试"
+        title: "Delete failed",
+        description: "Failed to delete file"
       });
     }
   }, [handleFileDelete, toast]);
 
+  // 分析处理
   const handleAnalysis = useCallback(async (input: string) => {
     try {
+      // 检查操作配额
+      const operationType = proMode ? 'pro' : 'basic';
+      const isAllowed = await checkQuota(operationType);
+      
+      if (!isAllowed) {
+        return;
+      }
+
       await executeAnalysis(input);
+      // 分析完成后刷新配额
+      refreshQuota();
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "分析失败",
-        description: error instanceof Error ? error.message : "分析失败，请稍后重试"
+        title: "Analysis failed",
+        description: error instanceof Error ? error.message : "Analysis failed, please try again"
       });
     }
-  }, [executeAnalysis, toast]);
+  }, [executeAnalysis, proMode, checkQuota, refreshQuota, toast]);
+
+  // Pro模式切换处理
+  const handleProModeChange = useCallback(async (enabled: boolean) => {
+    if (enabled && !isSignedIn) {
+      toast({
+        variant: "destructive",
+        title: "Pro mode not available",
+        description: "Please sign in to use pro mode features"
+      });
+      return;
+    }
+
+    if (enabled && proQuota?.remainingQuota === 0) {
+      toast({
+        variant: "destructive",
+        title: "No pro operations left",
+        description: "You've used all your pro operations for this month"
+      });
+      return;
+    }
+
+    setProMode(enabled);
+  }, [isSignedIn, proQuota?.remainingQuota, setProMode, toast]);
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <div className="flex-1 overflow-auto">
         <div className="max-w-[1800px] w-[90%] mx-auto py-8">
+          {/* 配额显示 */}
+          <div className="max-w-3xl mx-auto mb-8">
+            {basicQuota && (
+              <UsageQuota
+                basicQuota={basicQuota}
+                proQuota={proQuota}
+                isProMode={proMode}
+              />
+            )}
+          </div>
+
           <AnalysisInput
             onSubmit={handleAnalysis}
             onFileUpload={handleUpload}
@@ -69,7 +132,7 @@ export function ChatExcelSection() {
             disabled={analyzing || executing}
             analyzing={analyzing}
             proMode={proMode}
-            onProModeChange={setProMode}
+            onProModeChange={handleProModeChange}
           />
 
           <ExecutionResult
@@ -80,4 +143,4 @@ export function ChatExcelSection() {
       </div>
     </div>
   );
-} 
+}

@@ -36,33 +36,40 @@ export async function POST(req: Request) {
       }, { status: 400 })
     }
 
+    const { userId } = await auth();
+    const ip = getClientIp(headers());
+    const operationType = data.mode === 'pro' ? 'pro' : 'basic';
+
     // 创建数据库客户端
     const supabase = new SupabaseClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // 获取当前用户信息和IP
-    const { userId } = await auth();
-    const ip = getClientIp(headers());
+    // 直接在这里检查操作权限
+    const { data: checkResult, error: checkError } = await supabase
+      .rpc('is_operation_allowed', {
+        p_user_id: userId || null,
+        p_ip_address: userId ? null : ip,
+        p_operation_type: operationType
+      });
 
-    // 检查操作权限
-    const operationType = data.mode === 'pro' ? 'pro' : 'basic';
-    const checkResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/chatexcel/check-operation`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ operationType })
-    });
-
-    const checkResult = await checkResponse.json();
-    
-    if (!checkResult.allowed) {
+    if (checkError) {
+      console.error('Failed to check operation:', checkError);
       return NextResponse.json<ApiResponse<AssistantResponse>>({
         data: null,
         error: {
-          detail: checkResult.error || '您的操作额度已用完',
+          detail: '系统错误',
+          status_code: 500
+        }
+      }, { status: 500 });
+    }
+
+    if (!checkResult) {
+      return NextResponse.json<ApiResponse<AssistantResponse>>({
+        data: null,
+        error: {
+          detail: `您的${operationType === 'pro' ? 'Pro' : '基础'}操作额度已用完`,
           status_code: 403
         }
       }, { status: 403 });

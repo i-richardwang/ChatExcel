@@ -320,7 +320,7 @@ export function useChatExcel() {
   }, []);
 
   // 执行分析
-  const executeAnalysis = useCallback(async (userInput: string) => {
+  const executeAnalysis = useCallback(async (userInput: string, isProMode: boolean) => {
     if (uploadedFiles.length === 0) {
       throw new Error('请先上传要分析的文件');
     }
@@ -329,7 +329,6 @@ export function useChatExcel() {
       setAnalyzing(true);
       setAnalysisResult(null);
 
-      // 并行执行 API 调用和 Pyodide 初始化
       const [response, pyodide] = await Promise.all([
         fetch('/api/chatexcel/analyze', {
           method: 'POST',
@@ -345,7 +344,7 @@ export function useChatExcel() {
               };
               return acc;
             }, {} as Record<string, { dtypes: Record<string, string>; fileType: 'csv' | 'xlsx' | 'xls' }>),
-            mode: proMode ? 'pro' : 'basic'
+            mode: isProMode ? 'pro' : 'basic'
           } as AnalysisRequest)
         }).then(res => res.json() as Promise<ApiResponse<AssistantResponse>>),
         initializePyodide()

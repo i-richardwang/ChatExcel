@@ -74,7 +74,7 @@ export function ChatExcelSection() {
         return;
       }
 
-      await executeAnalysis(input);
+      await executeAnalysis(input, proMode);
       // 分析完成后刷新配额
       refreshQuota();
     } catch (error) {

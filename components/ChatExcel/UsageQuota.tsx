@@ -27,8 +27,10 @@ export function UsageQuota({ basicQuota, proQuota, isProMode }: UsageQuotaProps)
   const percentageUsed = (currentQuota.usedQuota / currentQuota.totalQuota) * 100;
 
   const getQuotaMessage = () => {
-    if (!isSignedIn) {
-      return "Guest users get 3 free basic operations. Sign in to get more!";
+    if (!isSignedIn || currentQuota.subscriptionTier === 'none') {
+      return isSignedIn 
+        ? "You have 3 free basic operations. Subscribe to get more!"
+        : "Guest users get 3 free basic operations. Sign in to get more!";
     }
 
     switch (currentQuota.subscriptionTier) {

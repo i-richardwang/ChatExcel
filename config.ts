@@ -48,11 +48,11 @@ const config = {
       {
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1O5KtcAxyNprDp7iftKnrrpw"
+            ? "price_1QZmX1BZOyB4SFLp7i58ehho"
             : "price_456",
         yearlyPriceId:
           process.env.NODE_ENV === "development"
-            ? "price_1O5KtcAxyNprDp7iftKnYrly"  // This should be your actual yearly price ID
+            ? "price_1QZmXNBZOyB4SFLpiHbMrYxA"  // This should be your actual yearly price ID
             : "price_458",
         // This plan will look different on the pricing page, it will be highlighted. You can only have one plan with isFeatured: true
         isFeatured: true,

@@ -82,6 +82,7 @@ export type FeaturesDataProps = {
   content: string;
   image?: string;
   video?: string;
+  demo?: React.ReactNode;
   icon?: React.ReactNode;
 };
 
@@ -266,33 +267,46 @@ export default function Features({
               </Accordion.Root>
             </div>
             <div
-              className={`h-[350px] min-h-[200px] w-auto  ${
+              className={`h-[400px] w-full max-w-md mx-auto bg-white/50 backdrop-blur-sm rounded-xl border border-neutral-200/50 shadow-lg p-6 flex items-center justify-center ${
                 ltr && "lg:order-1"
               }`}
             >
-              {data[currentIndex]?.image ? (
-                <motion.img
-                  key={currentIndex}
-                  src={data[currentIndex].image}
-                  alt="feature"
-                  className="aspect-auto h-full w-full rounded-xl border border-neutral-300/50 object-cover object-left-top p-1 shadow-lg"
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                />
-              ) : data[currentIndex]?.video ? (
-                <video
-                  preload="auto"
-                  src={data[currentIndex].video}
-                  className="aspect-auto h-full w-full rounded-lg object-cover shadow-lg"
-                  autoPlay
-                  loop
-                  muted
-                />
-              ) : (
-                <div className="aspect-auto h-full w-full rounded-xl border border-neutral-300/50 bg-gray-200 p-1"></div>
-              )}
+              <div className="w-full h-full flex items-center justify-center">
+                {data[currentIndex]?.demo ? (
+                  <motion.div
+                    key={currentIndex}
+                    className="w-full h-full"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  >
+                    {data[currentIndex].demo}
+                  </motion.div>
+                ) : data[currentIndex]?.image ? (
+                  <motion.img
+                    key={currentIndex}
+                    src={data[currentIndex].image}
+                    alt="feature"
+                    className="aspect-auto h-full w-full rounded-xl border border-neutral-300/50 object-cover object-left-top p-1"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  />
+                ) : data[currentIndex]?.video ? (
+                  <video
+                    preload="auto"
+                    src={data[currentIndex].video}
+                    className="aspect-auto h-full w-full rounded-lg object-cover"
+                    autoPlay
+                    loop
+                    muted
+                  />
+                ) : (
+                  <div className="aspect-auto h-full w-full rounded-xl border border-neutral-300/50 bg-gray-200 p-1"></div>
+                )}
+              </div>
             </div>
 
             <ul

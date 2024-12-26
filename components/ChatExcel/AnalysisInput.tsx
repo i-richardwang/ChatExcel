@@ -5,7 +5,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Loader2, FileUp, Sparkles, Upload, X, FileText, ArrowRight } from "lucide-react";
+import { Loader2, FileUp, Sparkles, Upload, X, FileText } from "lucide-react";
 import { cn } from "@/libs/utils";
 import type { UploadedFileInfo } from '@/types/chatexcel';
 import {
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { SubmitButton } from "./SubmitButton";
 
 const EXAMPLE_PROMPTS = [
   {
@@ -236,18 +237,13 @@ export function AnalysisInput({
                     className="data-[state=checked]:bg-[#0d9488] data-[state=checked]:hover:bg-[#0d9488]/90"
                   />
                 </div>
-                <Button
-                  size="sm"
-                  onClick={handleSubmit}
-                  disabled={disabled || analyzing || !input.trim()}
-                  className="h-8 px-3 shadow-none bg-[#0d9488] hover:bg-[#0d9488]/90 text-white"
-                >
-                  {analyzing ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <ArrowRight className="h-4 w-4" />
-                  )}
-                </Button>
+                <SubmitButton
+                  onSubmit={handleSubmit}
+                  disabled={disabled}
+                  analyzing={analyzing}
+                  proMode={proMode}
+                  hasInput={!!input.trim()}
+                />
               </div>
             </div>
           </div>

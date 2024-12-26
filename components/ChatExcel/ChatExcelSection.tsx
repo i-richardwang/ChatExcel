@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AnalysisInput } from './AnalysisInput';
 import { ExecutionResult } from './ExecutionResult';
 import { UsageQuota } from './UsageQuota';
@@ -8,6 +8,9 @@ import { useChatExcel } from '@/hooks/use-chatexcel';
 import { useQuota } from '@/hooks/use-quota';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@clerk/nextjs';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import Pricing from "@/components/Pricing";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function ChatExcelSection() {
   const {
@@ -31,6 +34,8 @@ export function ChatExcelSection() {
 
   const { toast } = useToast();
   const { isSignedIn } = useUser();
+
+  const [showPricing, setShowPricing] = useState(false);
 
   // 在组件加载时检查配额
   useEffect(() => {
@@ -68,9 +73,12 @@ export function ChatExcelSection() {
     try {
       // 检查操作配额
       const operationType = proMode ? 'pro' : 'basic';
-      const isAllowed = await checkQuota(operationType);
+      const { isAllowed, shouldShowPricing } = await checkQuota(operationType);
       
       if (!isAllowed) {
+        if (shouldShowPricing) {
+          setShowPricing(true);
+        }
         return;
       }
 
@@ -110,37 +118,75 @@ export function ChatExcelSection() {
   }, [isSignedIn, basicQuota?.subscriptionTier, setProMode, toast]);
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)]">
-      <div className="flex-1 overflow-auto">
-        <div className="max-w-[1800px] w-[90%] mx-auto py-8">
-          {/* 配额显示 */}
-          <div className="max-w-3xl mx-auto mb-8">
-            {basicQuota && (
-              <UsageQuota
-                basicQuota={basicQuota}
-                proQuota={proQuota}
-                isProMode={proMode}
-              />
-            )}
+    <>
+      <div className="flex flex-col min-h-[calc(100vh-4rem)]">
+        <div className="flex-1 overflow-auto">
+          <div className="max-w-[1800px] w-[90%] mx-auto py-8">
+            {/* 配额显示 */}
+            <div className="max-w-3xl mx-auto mb-8">
+              {basicQuota && (
+                <UsageQuota
+                  basicQuota={basicQuota}
+                  proQuota={proQuota}
+                  isProMode={proMode}
+                />
+              )}
+            </div>
+
+            <AnalysisInput
+              onSubmit={handleAnalysis}
+              onFileUpload={handleUpload}
+              onFileDelete={handleDelete}
+              files={uploadedFiles}
+              disabled={analyzing || executing}
+              analyzing={analyzing}
+              proMode={proMode}
+              onProModeChange={handleProModeChange}
+            />
+
+            <ExecutionResult
+              result={analysisResult}
+              executing={executing}
+            />
           </div>
-
-          <AnalysisInput
-            onSubmit={handleAnalysis}
-            onFileUpload={handleUpload}
-            onFileDelete={handleDelete}
-            files={uploadedFiles}
-            disabled={analyzing || executing}
-            analyzing={analyzing}
-            proMode={proMode}
-            onProModeChange={handleProModeChange}
-          />
-
-          <ExecutionResult
-            result={analysisResult}
-            executing={executing}
-          />
         </div>
       </div>
-    </div>
+
+      <AnimatePresence>
+        {showPricing && (
+          <motion.div 
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div 
+              className="fixed inset-0 overflow-y-auto"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            >
+              <div className="min-h-full flex items-center justify-center p-4">
+                <div className="w-full bg-background">
+                  <button
+                    onClick={() => setShowPricing(false)}
+                    className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    <span className="sr-only">Close</span>
+                  </button>
+                  <Pricing />
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

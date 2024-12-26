@@ -11,10 +11,15 @@ interface QuotaInfo {
   error?: string;
 }
 
+interface QuotaCheckResult {
+  isAllowed: boolean;
+  shouldShowPricing: boolean;
+}
+
 interface UseQuotaReturn {
   basicQuota: QuotaInfo | null;
   proQuota: QuotaInfo | null;
-  checkQuota: (operationType: 'basic' | 'pro') => Promise<boolean>;
+  checkQuota: (operationType: 'basic' | 'pro') => Promise<QuotaCheckResult>;
   isLoading: boolean;
   refreshQuota: () => Promise<void>;
 }
@@ -50,7 +55,7 @@ export function useQuota(): UseQuotaReturn {
   }, []);
 
   // 检查配额（显示错误提示）
-  const checkQuota = useCallback(async (operationType: 'basic' | 'pro'): Promise<boolean> => {
+  const checkQuota = useCallback(async (operationType: 'basic' | 'pro'): Promise<QuotaCheckResult> => {
     try {
       setIsLoading(true);
 
@@ -62,7 +67,7 @@ export function useQuota(): UseQuotaReturn {
             title: "Pro mode not available",
             description: "Please sign in to use pro mode features"
           });
-          return false;
+          return { isAllowed: false, shouldShowPricing: false };
         }
         
         // 检查用户是否有 pro 权限
@@ -71,7 +76,7 @@ export function useQuota(): UseQuotaReturn {
             title: "Pro mode not available",
             description: "Please upgrade to a pro plan to use this feature"
           });
-          return false;
+          return { isAllowed: false, shouldShowPricing: true };
         }
       }
 
@@ -82,7 +87,7 @@ export function useQuota(): UseQuotaReturn {
           title: "Error",
           description: "Failed to check operation quota. Please try again."
         });
-        return false;
+        return { isAllowed: false, shouldShowPricing: false };
       }
 
       // 更新对应的配额状态
@@ -93,15 +98,21 @@ export function useQuota(): UseQuotaReturn {
       }
 
       if (!data.allowed) {
+        // 未登录用户且配额用完，显示定价页面
+        if (!isSignedIn && operationType === 'basic') {
+          return { isAllowed: false, shouldShowPricing: true };
+        }
+
+        // 其他情况显示错误提示
         toast({
           variant: "destructive",
           title: "Operation not allowed",
           description: data.error || `You've reached your ${operationType} operations limit for this month.`
         });
-        return false;
+        return { isAllowed: false, shouldShowPricing: false };
       }
 
-      return true;
+      return { isAllowed: true, shouldShowPricing: false };
     } catch (error) {
       console.error('Failed to check quota:', error);
       toast({
@@ -109,7 +120,7 @@ export function useQuota(): UseQuotaReturn {
         title: "Error",
         description: "Failed to check operation quota. Please try again."
       });
-      return false;
+      return { isAllowed: false, shouldShowPricing: false };
     } finally {
       setIsLoading(false);
     }

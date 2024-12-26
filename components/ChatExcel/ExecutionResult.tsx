@@ -172,19 +172,20 @@ export function ExecutionResult({
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-8">
-      <div className="flex items-center justify-between mb-4">
+      <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Code className="h-4 w-4 text-[#0d9488]" />
           <h2 className="text-base font-medium">Analysis Result</h2>
         </div>
+
         {result?.outputFiles && result.outputFiles.length > 0 && (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 p-4 border rounded-[4px] bg-muted/30">
             {result.outputFiles.map((file, index) => (
               <Button
                 key={index}
                 variant="outline"
                 size="sm"
-                className="gap-2"
+                className="gap-2 bg-background hover:bg-muted"
                 onClick={() => handleDownload(file)}
               >
                 <Download className="h-4 w-4" />
@@ -196,141 +197,150 @@ export function ExecutionResult({
             ))}
           </div>
         )}
-      </div>
 
-      <div className="space-y-4">
-        {executing ? (
-          <div className="flex items-center justify-center h-32 border rounded-[4px] bg-background">
-            <div className="animate-spin">
-              <svg
-                className="h-8 w-8 text-muted-foreground"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
+        <div className="space-y-4">
+          {executing ? (
+            <div className="flex items-center justify-center h-32 border rounded-[4px] bg-background">
+              <div className="animate-spin">
+                <svg
+                  className="h-8 w-8 text-muted-foreground"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+              </div>
             </div>
-          </div>
-        ) : result ? (
-          <div className="space-y-4">
-            {/* 需要更多信息 */}
-            {result.status === 'need_more_info' && (
-              <Alert variant="default" className="border rounded-[4px]">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  {result.message || 'Need more information to process. Please provide more details.'}
-                </AlertDescription>
-              </Alert>
-            )}
+          ) : result ? (
+            <div className="space-y-4">
+              {/* 需要更多信息 */}
+              {result.status === 'need_more_info' && (
+                <Alert variant="default" className="border rounded-[4px]">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    {result.message || 'Need more information to process. Please provide more details.'}
+                  </AlertDescription>
+                </Alert>
+              )}
 
-            {/* 超出范围 */}
-            {result.status === 'out_of_scope' && (
-              <Alert variant="destructive" className="rounded-[4px]">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  {result.message || 'Sorry, your request is out of the system scope.'}
-                </AlertDescription>
-              </Alert>
-            )}
+              {/* 超出范围 */}
+              {result.status === 'out_of_scope' && (
+                <Alert variant="destructive" className="rounded-[4px]">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    {result.message || 'Sorry, your request is out of the system scope.'}
+                  </AlertDescription>
+                </Alert>
+              )}
 
-            {/* 错误信息 */}
-            {result.status === 'error' && result.error && (
-              <Alert variant="destructive" className="rounded-[4px]">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{result.error}</AlertDescription>
-              </Alert>
-            )}
+              {/* 错误信息 */}
+              {result.status === 'error' && result.error && (
+                <Alert variant="destructive" className="rounded-[4px]">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{result.error}</AlertDescription>
+                </Alert>
+              )}
 
-            {/* 输出内容 */}
-            {result.output && (
-              <div className="border rounded-[4px] bg-muted/30">
-                <pre className="p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words max-h-[500px] overflow-y-auto">
-                  {result.output}
-                </pre>
-              </div>
-            )}
-
-            {/* 图表展示 */}
-            {result.charts?.map((chart, index) => (
-              <div key={index} className="space-y-2">
-                {renderSizeControls(index)}
-                <div className="border rounded-[4px] bg-background p-2">
-                  {chart.type === 'matplotlib' ? (
-                    <div 
-                      className="relative mx-auto"
-                      style={chartSizes[index] || DEFAULT_SIZE}
-                    >
-                      <img
-                        src={`data:image/png;base64,${chart.data}`}
-                        alt={`Analysis Chart ${index + 1}`}
-                        className="w-full h-full object-contain"
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : chart.type === 'plotly' ? (
-                    <div>
-                      {(() => {
-                        try {
-                          const figure = JSON.parse(chart.data);
-                          const size = chartSizes[index] || DEFAULT_SIZE;
-                          
-                          return (
-                            <div 
-                              className="relative mx-auto" 
-                              style={size}
-                            >
-                              <Plot
-                                data={figure.data}
-                                layout={{
-                                  ...figure.layout,
-                                  autosize: true,
-                                  width: undefined,
-                                  height: undefined,
-                                  margin: { t: 30, r: 10, b: 30, l: 50 },
-                                  paper_bgcolor: 'transparent',
-                                  plot_bgcolor: 'transparent',
-                                }}
-                                config={{
-                                  responsive: true,
-                                  displayModeBar: true,
-                                  displaylogo: false,
-                                }}
-                                className="w-full h-full"
-                                useResizeHandler={true}
-                                style={{ width: '100%', height: '100%' }}
-                              />
-                            </div>
-                          );
-                        } catch (error) {
-                          console.error('Failed to parse Plotly data:', error);
-                          return (
-                            <Alert variant="destructive" className="rounded-[4px]">
-                              <AlertCircle className="h-4 w-4" />
-                              <AlertDescription>Failed to render chart {index + 1}</AlertDescription>
-                            </Alert>
-                          );
-                        }
-                      })()}
-                    </div>
-                  ) : null}
+              {/* 输出内容 */}
+              {result.output && (
+                <div className="border rounded-[4px] bg-muted/30">
+                  <pre className="p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words max-h-[500px] overflow-y-auto">
+                    {result.output}
+                  </pre>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : null}
+              )}
+
+              {/* 图表展示 */}
+              {result.charts?.map((chart, index) => (
+                <div key={index} className="-mx-[max(0px,calc((100vw-48rem)/2))]">
+                  <div className="max-w-3xl mx-auto space-y-2">
+                    <div className="flex justify-end">
+                      {renderSizeControls(index)}
+                    </div>
+                  </div>
+                  <div className="flex justify-center">
+                    <div 
+                      className="border rounded-[4px] bg-background p-2"
+                      style={{ width: 'max-content' }}
+                    >
+                      {chart.type === 'matplotlib' ? (
+                        <div 
+                          className="relative"
+                          style={chartSizes[index] || DEFAULT_SIZE}
+                        >
+                          <img
+                            src={`data:image/png;base64,${chart.data}`}
+                            alt={`Analysis Chart ${index + 1}`}
+                            className="w-full h-full object-contain"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : chart.type === 'plotly' ? (
+                        <div>
+                          {(() => {
+                            try {
+                              const figure = JSON.parse(chart.data);
+                              const size = chartSizes[index] || DEFAULT_SIZE;
+                              
+                              return (
+                                <div 
+                                  className="relative" 
+                                  style={size}
+                                >
+                                  <Plot
+                                    data={figure.data}
+                                    layout={{
+                                      ...figure.layout,
+                                      autosize: true,
+                                      width: undefined,
+                                      height: undefined,
+                                      margin: { t: 30, r: 10, b: 30, l: 50 },
+                                      paper_bgcolor: 'transparent',
+                                      plot_bgcolor: 'transparent',
+                                    }}
+                                    config={{
+                                      responsive: true,
+                                      displayModeBar: true,
+                                      displaylogo: false,
+                                    }}
+                                    className="w-full h-full"
+                                    useResizeHandler={true}
+                                    style={{ width: '100%', height: '100%' }}
+                                  />
+                                </div>
+                              );
+                            } catch (error) {
+                              console.error('Failed to parse Plotly data:', error);
+                              return (
+                                <Alert variant="destructive" className="rounded-[4px]">
+                                  <AlertCircle className="h-4 w-4" />
+                                  <AlertDescription>Failed to render chart {index + 1}</AlertDescription>
+                                </Alert>
+                              );
+                            }
+                          })()}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );

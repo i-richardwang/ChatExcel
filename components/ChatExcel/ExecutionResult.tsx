@@ -65,17 +65,15 @@ export function ExecutionResult({
   }
 
   // 处理文件下载
-  const handleDownload = () => {
-    if (!result?.outputFile) return;
-
-    const blob = new Blob([result.outputFile.content], {
+  const handleDownload = (file: { filename: string; content: Uint8Array }) => {
+    const blob = new Blob([file.content], {
       type: 'text/csv;charset=utf-8;'
     });
 
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', result.outputFile.filename);
+    link.setAttribute('download', file.filename);
     document.body.appendChild(link);
     link.click();
 
@@ -179,19 +177,24 @@ export function ExecutionResult({
           <Code className="h-4 w-4 text-[#0d9488]" />
           <h2 className="text-base font-medium">Analysis Result</h2>
         </div>
-        {result?.outputFile && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-2"
-            onClick={handleDownload}
-          >
-            <Download className="h-4 w-4" />
-            Download Result
-            <span className="text-xs text-muted-foreground">
-              ({(result.outputFile.size / 1024).toFixed(1)} KB)
-            </span>
-          </Button>
+        {result?.outputFiles && result.outputFiles.length > 0 && (
+          <div className="flex items-center gap-2">
+            {result.outputFiles.map((file, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                onClick={() => handleDownload(file)}
+              >
+                <Download className="h-4 w-4" />
+                Download {file.filename}
+                <span className="text-xs text-muted-foreground">
+                  ({(file.size / 1024).toFixed(1)} KB)
+                </span>
+              </Button>
+            ))}
+          </div>
         )}
       </div>
 

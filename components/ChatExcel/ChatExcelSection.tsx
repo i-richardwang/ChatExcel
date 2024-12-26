@@ -97,17 +97,17 @@ export function ChatExcelSection() {
       return;
     }
 
-    if (enabled && proQuota?.remainingQuota === 0) {
+    if (enabled && basicQuota && !['pro', 'lifetime'].includes(basicQuota.subscriptionTier)) {
       toast({
         variant: "destructive",
-        title: "No pro operations left",
-        description: "You've used all your pro operations for this month"
+        title: "Pro mode not available",
+        description: "Please upgrade to a pro plan to use pro mode features"
       });
       return;
     }
 
     setProMode(enabled);
-  }, [isSignedIn, proQuota?.remainingQuota, setProMode, toast]);
+  }, [isSignedIn, basicQuota?.subscriptionTier, setProMode, toast]);
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">

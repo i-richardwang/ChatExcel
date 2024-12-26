@@ -52,7 +52,10 @@ export async function POST(req: NextRequest) {
         const customerId = session?.customer;
         const priceId = session?.line_items?.data[0]?.price.id;
         const userId = stripeObject.client_reference_id;
-        const plan = configFile.stripe.plans.find((p) => p.priceId === priceId);
+        // 同时检查 priceId 和 yearlyPriceId
+        const plan = configFile.stripe.plans.find((p) => 
+          p.priceId === priceId || p.yearlyPriceId === priceId
+        );
 
         const customer = (await stripe.customers.retrieve(
           customerId as string
@@ -86,8 +89,39 @@ export async function POST(req: NextRequest) {
 
       case "customer.subscription.updated": {
         // The customer might have changed the plan (higher or lower plan, cancel soon etc...)
-        // You don't need to do anything here, because Stripe will let us know when the subscription is canceled for good (at the end of the billing cycle) in the "customer.subscription.deleted" event
-        // You can update the user data to show a "Cancel soon" badge for instance
+        
+        const stripeObject: Stripe.Subscription = event.data.object as Stripe.Subscription;
+        const customerId = stripeObject.customer;
+        const priceId = stripeObject.items.data[0].price.id;
+        
+        // 同时检查 priceId 和 yearlyPriceId
+        const plan = configFile.stripe.plans.find((p) => 
+          p.priceId === priceId || p.yearlyPriceId === priceId
+        );
+
+        if (!plan) {
+          console.error('No matching plan found for priceId:', priceId);
+          break;
+        }
+
+        // Update subscription info in Supabase
+
+        const { data, error } = await supabase
+          .from("users")
+          .update({
+            price_id: priceId,
+            subscription_tier: plan.name.toLowerCase(),
+            subscription_status: stripeObject.status,
+            subscription_end_date: new Date(stripeObject.current_period_end * 1000).toISOString()
+          })
+          .eq("customer_id", customerId)
+          .select();
+
+        if (error) {
+          console.error('Error updating Supabase:', error);
+          throw error;
+        }
+
         break;
       }
 

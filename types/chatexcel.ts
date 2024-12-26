@@ -26,8 +26,8 @@ export interface FileInfo {
 export interface PythonCommand {
   /** 要执行的Python/Pandas代码 */
   code: string;
-  /** 如果需要保存处理后的表格，这里指定输出文件名 */
-  output_filename?: string | null;
+  /** 如果需要保存处理后的表格，这里指定输出文件名列表 */
+  output_filename?: string[] | null;
 }
 
 /**
@@ -80,14 +80,14 @@ export interface AnalysisResult {
   /** 反馈信息 */
   message?: string;
   /** 输出文件信息 */
-  outputFile?: {
+  outputFiles?: Array<{
     /** 文件名 */
     filename: string;
     /** 文件内容 */
     content: Uint8Array;
     /** 文件大小 */
     size: number;
-  };
+  }>;
 }
 
 /**

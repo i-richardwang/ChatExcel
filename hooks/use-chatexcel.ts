@@ -256,7 +256,7 @@ export function useChatExcel() {
         const fileExt = file.name.toLowerCase().split('.').pop();
         
         if (!['csv', 'xlsx', 'xls'].includes(fileExt || '')) {
-          throw new Error('只支持 CSV 或 Excel 文件格式');
+          throw new Error('只支持 CSV 或 Excel 文���格式');
         }
 
         const dtypes = fileExt === 'csv' 
@@ -467,27 +467,40 @@ export function useChatExcel() {
         // 处理输出文件
         if (result.command.output_filename) {
           try {
-            const fileContent = pyodide.FS.readFile(
-              result.command.output_filename,
-              { encoding: 'binary' }
-            );
-            outputFile = {
-              filename: result.command.output_filename,
-              content: fileContent,
-              size: fileContent.length
-            };
-          } catch (fileError) {
-            console.error('Failed to read output file:', fileError);
-            output += '\n读取输出文件失败';
-          }
-        }
+            const outputFiles = result.command.output_filename.map(filename => {
+              const fileContent = pyodide.FS.readFile(
+                filename,
+                { encoding: 'binary' }
+              );
+              return {
+                filename,
+                content: fileContent,
+                size: fileContent.length
+              };
+            });
 
-        setAnalysisResult({
-          status: 'success',
-          output,
-          charts: charts.length > 0 ? charts : undefined,
-          outputFile
-        });
+            setAnalysisResult({
+              status: 'success',
+              output,
+              charts: charts.length > 0 ? charts : undefined,
+              outputFiles
+            });
+          } catch (fileError) {
+            console.error('Failed to read output files:', fileError);
+            output += '\n读取输出文件失败';
+            setAnalysisResult({
+              status: 'success',
+              output,
+              charts: charts.length > 0 ? charts : undefined
+            });
+          }
+        } else {
+          setAnalysisResult({
+            status: 'success',
+            output,
+            charts: charts.length > 0 ? charts : undefined
+          });
+        }
       } catch (execError) {
         console.error('Code execution error:', execError);
         setAnalysisResult({

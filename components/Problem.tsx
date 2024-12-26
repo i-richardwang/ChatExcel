@@ -21,8 +21,8 @@ const problems = [
 const Problem = () => {
   return (
     <section className="bg-neutral text-neutral-content">
-      <div className="max-w-7xl mx-auto px-8 py-16 md:py-32">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto px-8 py-8 md:py-16">
+        <div className="text-center mb-12">
           <p className="text-sm font-semibold tracking-wider text-green-500 mb-4">
             PROBLEM
           </p>

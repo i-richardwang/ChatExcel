@@ -14,9 +14,9 @@ const press = [
 export function Press() {
   return (
     <section id="press">
-      <div className="py-14">
+      <div className="py-6 md:py-8">
         <div className="container mx-auto px-4 md:px-8">
-          <h3 className="text-center text-sm font-semibold text-gray-500">
+          <h3 className="text-center text-sm font-semibold tracking-wider text-gray-500">
             FEATURED IN
           </h3>
           <div className="relative mt-6">

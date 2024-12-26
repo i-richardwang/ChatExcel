@@ -113,12 +113,19 @@ const data = [
 
 export default function Component() {
   return (
-    <Section 
-      title="How it works" 
-      subtitle="Three Simple Steps to Excel Freedom"
-      description="Transform hours of manual Excel work into seconds - no technical skills required."
-    >
+    <section className="max-w-7xl mx-auto px-8 py-8 md:py-16">
+      <div className="text-center mb-12">
+        <p className="text-sm font-semibold tracking-wider text-green-500 mb-4">
+          HOW IT WORKS
+        </p>
+        <h2 className="font-extrabold text-4xl md:text-5xl tracking-tight mb-6">
+          Three Simple Steps to Excel Freedom
+        </h2>
+        <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed">
+          Transform hours of manual Excel work into seconds - no technical skills required.
+        </p>
+      </div>
       <Features data={data} />
-    </Section>
+    </section>
   );
 }

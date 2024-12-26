@@ -26,16 +26,17 @@ const Pricing = () => {
 
   return (
     <section className="bg-neutral-100 dark:bg-neutral-900 overflow-hidden" id="pricing">
-      <div className="py-24 px-8 max-w-7xl mx-auto">
-        <div className="flex flex-col text-center w-full mb-20">
+      <div className="py-8 md:py-16 px-8 max-w-7xl mx-auto">
+        <div className="flex flex-col text-center w-full mb-12">
           <p className="text-sm font-semibold tracking-wider text-green-500 mb-4">
             PRICING
           </p>
           <h2 className="font-extrabold text-4xl md:text-5xl tracking-tight mb-6">
-            Stop wasting time on repetitive Excel work.
-            <br />
-            Choose your plan and start automating today.
+            Stop wasting time on repetitive Excel work
           </h2>
+          <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-8">
+            Choose your plan and start automating today
+          </p>
           <div className="flex justify-center items-center gap-2">
             <span className="text-sm font-semibold">Monthly</span>
             <Label>

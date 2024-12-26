@@ -143,12 +143,14 @@ const FaqItem = ({ item }: { item: FAQItemProps }) => {
 const FAQ = () => {
   return (
     <section className="bg-white" id="faq">
-      <div className="py-24 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
+      <div className="py-8 md:py-16 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
         <div className="flex flex-col text-left basis-1/2">
-          <p className="inline-block font-semibold text-green-500 mb-4">FAQ</p>
-          <p className="sm:text-4xl text-3xl font-extrabold text-base-content">
-            Frequently Asked Questions
+          <p className="text-sm font-semibold tracking-wider text-green-500 mb-4">
+            FAQ
           </p>
+          <h2 className="font-extrabold text-4xl sm:text-4xl tracking-tight">
+            Frequently Asked Questions
+          </h2>
         </div>
 
         <ul className="basis-1/2">

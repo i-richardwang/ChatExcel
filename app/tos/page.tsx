@@ -2,29 +2,6 @@ import Link from "next/link";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
 
-// CHATGPT PROMPT TO GENERATE YOUR TERMS & SERVICES — replace with your own data 👇
-
-// 1. Go to https://chat.openai.com/
-// 2. Copy paste bellow
-// 3. Replace the data with your own (if needed)
-// 4. Paste the answer from ChatGPT directly in the <pre> tag below
-
-// You are an excellent lawyer.
-
-// I need your help to write a simple Terms & Services for my website. Here is some context:
-// - Website: https://shipfa.st
-// - Name: ShipFast
-// - Contact information: marc@shipfa.st
-// - Description: A JavaScript code boilerplate to help entrepreneurs launch their startups faster
-// - Ownership: when buying a package, users can download code to create apps. They own the code but they do not have the right to resell it. They can ask for a full refund within 7 day after the purchase.
-// - User data collected: name, email and payment information
-// - Non-personal data collection: web cookies
-// - Link to privacy-policy: https://shipfa.st/privacy-policy
-// - Governing Law: France
-// - Updates to the Terms: users will be updated by email
-
-// Please write a simple Terms & Services for my site. Add the current date. Do not add or explain your reasoning. Answer:
-
 export const metadata = getSEOTags({
   title: `Terms and Conditions | ${config.appName}`,
   canonicalUrlRelative: "/tos",
@@ -57,39 +34,47 @@ const TOS = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: September 26, 2023
+          {`Last Updated: November 28, 2023
 
-Welcome to ShipFast!
+Welcome to ChatExcel!
 
-These Terms of Service ("Terms") govern your use of the ShipFast website at https://shipfa.st ("Website") and the services provided by ShipFast. By using our Website and services, you agree to these Terms.
+These Terms of Service ("Terms") govern your use of the ChatExcel website at https://chatexcel.org ("Website") and the services provided by ChatExcel. By using our Website and services, you agree to these Terms.
 
-1. Description of ShipFast
+1. Description of ChatExcel
 
-ShipFast is a platform that offers a JavaScript code boilerplate to assist entrepreneurs in launching their startups more efficiently.
+ChatExcel is a browser-based platform that allows users to perform Excel operations using natural language commands. It leverages AI to simplify tasks such as data analysis, visualization, and manipulation of spreadsheets. All processing is done locally within the user's browser, ensuring data privacy and security.
 
-2. Ownership and Usage Rights
+2. User Data and Privacy
 
-When you purchase a package from ShipFast, you gain the right to download and use the code provided for creating applications. You own the code you create but do not have the right to resell it. We offer a full refund within 7 days of purchase, as specified in our refund policy.
+ChatExcel is committed to protecting your privacy. We do not collect or store any personal data or files uploaded by users. All data processing occurs within your browser, and no information is transmitted to our servers.
 
-3. User Data and Privacy
+3. Non-Personal Data Collection
 
-We collect and store user data, including name, email, and payment information, as necessary to provide our services. For details on how we handle your data, please refer to our Privacy Policy at https://shipfa.st/privacy-policy.
+We do not collect any non-personal data. ChatExcel operates entirely client-side, and no cookies or tracking mechanisms are used to collect user information.
 
-4. Non-Personal Data Collection
+4. Service Usage
 
-We use web cookies to collect non-personal data for the purpose of improving our services and user experience.
+ChatExcel offers both free and paid subscription tiers. Guest users and free tier users have limited access to basic operations. Paid subscribers have access to advanced features, including pro mode operations and increased usage quotas. Details of the subscription plans and their respective features are available on our pricing page.
 
-5. Governing Law
+5. Intellectual Property
 
-These Terms are governed by the laws of France.
+The ChatExcel platform, including its design, code, and functionality, is the intellectual property of ChatExcel and its creators. Users are granted a non-exclusive, non-transferable license to use the service for their personal or internal business purposes.
 
-6. Updates to the Terms
+6. Limitation of Liability
 
-We may update these Terms from time to time. Users will be notified of any changes via email.
+ChatExcel is provided "as is" without any warranties, express or implied. We shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from (a) your use or inability to use the service; (b) any unauthorized access to or use of our service; (c) any interruption or cessation of transmission to or from our service; (d) any bugs, viruses, trojan horses, or the like that may be transmitted to or through our service by any third party; (e) any errors or omissions in any content or for any loss or damage incurred as a result of the use of any content posted, emailed, transmitted, or otherwise made available through the service; and/or (f) user content or the defamatory, offensive, or illegal conduct of any third party.
 
-For any questions or concerns regarding these Terms of Service, please contact us at marc@shipfa.st.
+7. Governing Law
 
-Thank you for using ShipFast!`}
+These Terms are governed by the laws of the jurisdiction in which ChatExcel's creators are based, without regard to its conflict of law provisions.
+
+8. Updates to the Terms
+
+We may update these Terms from time to time. Users will be notified of any significant changes through our Website or, if applicable, via email.
+
+For any questions or concerns regarding these Terms of Service, please contact us at support@chatexcel.org.
+
+Thank you for using ChatExcel!`}
         </pre>
       </div>
     </main>

@@ -12,18 +12,18 @@ import config from "@/config";
 // You are an excellent lawyer.
 
 // I need your help to write a simple privacy policy for my website. Here is some context:
-// - Website: https://shipfa.st
-// - Name: ShipFast
-// - Description: A JavaScript code boilerplate to help entrepreneurs launch their startups faster
-// - User data collected: name, email and payment information
+// - Website: https://shipfa.st (replace with your actual domain)
+// - Name: ShipFast (replace with your actual app name)
+// - Description: A JavaScript code boilerplate to help entrepreneurs launch their startups faster (replace with your actual app description)
+// - User data collected: name, email and payment information (replace with your actual data collected)
 // - Non-personal data collection: web cookies
-// - Purpose of Data Collection: Order processing
+// - Purpose of Data Collection: Order processing (replace with your actual purpose)
 // - Data sharing: we do not share the data with any other parties
 // - Children's Privacy: we do not collect any data from children
 // - Updates to the Privacy Policy: users will be updated by email
-// - Contact information: marc@shipfa.st
+// - Contact information: marc@shipfa.st (replace with your actual contact email)
 
-// Please write a simple privacy policy for my site. Add the current date.  Do not add or explain your reasoning. Answer:
+// Please write a simple privacy policy for my site. Add the current date. Do not add or explain your reasoning. Answer:
 
 export const metadata = getSEOTags({
   title: `Privacy Policy | ${config.appName}`,
@@ -57,11 +57,11 @@ const PrivacyPolicy = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: 2023-08-25
+          {`Last Updated: 2023-11-20
 
-Thank you for visiting ShipFast ("we," "us," or "our"). This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our website located at https://shipfa.st (the "Website").
+Thank you for using ${config.appName} ("we," "us," or "our"). This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our website and services (collectively, the "Service").
 
-By accessing or using the Website, you agree to the terms of this Privacy Policy. If you do not agree with the practices described in this policy, please do not use the Website.
+By accessing or using the Service, you agree to the terms of this Privacy Policy. If you do not agree with the practices described in this policy, please do not use the Service.
 
 1. Information We Collect
 
@@ -69,9 +69,10 @@ By accessing or using the Website, you agree to the terms of this Privacy Policy
 
 We collect the following personal information from you:
 
-Name: We collect your name to personalize your experience and communicate with you effectively.
-Email: We collect your email address to send you important information regarding your orders, updates, and communication.
-Payment Information: We collect payment details to process your orders securely. However, we do not store your payment information on our servers. Payments are processed by trusted third-party payment processors.
+- Name: We collect your name to personalize your experience and communicate with you effectively.
+- Email: We collect your email address to send you important information regarding your account, updates, and communication related to the Service.
+- Payment Information: We collect payment details to process your subscription securely. Payments are processed by trusted third-party payment processors, and we do not store your full payment information on our servers.
+- Usage Data: We collect information about your interactions with the Service, such as the operations you perform, the files you upload, and your usage patterns. This data is anonymized and used to improve the Service.
 
 1.2 Non-Personal Data
 
@@ -79,29 +80,39 @@ We may use web cookies and similar technologies to collect non-personal informat
 
 2. Purpose of Data Collection
 
-We collect and use your personal data for the sole purpose of order processing. This includes processing your orders, sending order confirmations, providing customer support, and keeping you updated about the status of your orders.
+We collect and use your personal data for the following purposes:
+
+- Account Management: To create and manage your account, provide customer support, and communicate with you about your account.
+- Service Provision: To provide the core functionality of the Service, including processing your Excel files and delivering the results.
+- Order Processing: To process your subscription payments and manage your subscription.
+- Improvement of Service: To analyze usage patterns, identify areas for improvement, and develop new features.
+- Communication: To send you important updates, newsletters, and promotional materials related to the Service. You can opt-out of marketing communications at any time.
 
 3. Data Sharing
 
-We do not share your personal data with any third parties except as required for order processing (e.g., sharing your information with payment processors). We do not sell, trade, or rent your personal information to others.
+We do not share your personal data with any third parties except as required to provide the Service (e.g., sharing necessary information with payment processors). We do not sell, trade, or rent your personal information to others.
 
-4. Children's Privacy
+4. Data Security
 
-ShipFast is not intended for children under the age of 13. We do not knowingly collect personal information from children. If you are a parent or guardian and believe that your child has provided us with personal information, please contact us at the email address provided below.
+We take reasonable measures to protect your personal information from unauthorized access, use, or disclosure. All data processing occurs within your browser, and your files are not uploaded to our servers.
 
-5. Updates to the Privacy Policy
+5. Children's Privacy
+
+${config.appName} is not intended for children under the age of 13. We do not knowingly collect personal information from children. If you are a parent or guardian and believe that your child has provided us with personal information, please contact us at the email address provided below.
+
+6. Updates to the Privacy Policy
 
 We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. Any updates will be posted on this page, and we may notify you via email about significant changes.
 
-6. Contact Information
+7. Contact Information
 
 If you have any questions, concerns, or requests related to this Privacy Policy, you can contact us at:
 
-Email: marc@shipfa.st
+Email: support@chatexcel.org
 
 For all other inquiries, please visit our Contact Us page on the Website.
 
-By using ShipFast, you consent to the terms of this Privacy Policy.`}
+By using ${config.appName}, you consent to the terms of this Privacy Policy.`}
         </pre>
       </div>
     </main>

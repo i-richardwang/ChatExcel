@@ -95,26 +95,23 @@ export function ChatExcelSection() {
 
   // Pro模式切换处理
   const handleProModeChange = useCallback(async (enabled: boolean) => {
-    if (enabled && !isSignedIn) {
-      toast({
-        variant: "destructive",
-        title: "Pro mode not available",
-        description: "Please sign in to use pro mode features"
-      });
+    // 如果是关闭 Pro Mode，直接允许
+    if (!enabled) {
+      setProMode(false);
       return;
     }
 
-    if (enabled && basicQuota && !['pro', 'lifetime'].includes(basicQuota.subscriptionTier)) {
-      toast({
-        variant: "destructive",
-        title: "Pro mode not available",
-        description: "Please upgrade to a pro plan to use pro mode features"
-      });
+    // 检查是否有 Pro 权限
+    const hasPro = isSignedIn && basicQuota && ['pro', 'lifetime'].includes(basicQuota.subscriptionTier);
+    
+    if (!hasPro) {
+      // 显示 Pricing 页面
+      setShowPricing(true);
       return;
     }
 
-    setProMode(enabled);
-  }, [isSignedIn, basicQuota?.subscriptionTier, setProMode, toast]);
+    setProMode(true);
+  }, [isSignedIn, basicQuota?.subscriptionTier]);
 
   return (
     <>
@@ -167,11 +164,11 @@ export function ChatExcelSection() {
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
-              <div className="min-h-full flex items-center justify-center p-4">
-                <div className="w-full bg-background">
+              <div className="min-h-full">
+                <div className="relative w-full bg-neutral-100 dark:bg-neutral-900">
                   <button
                     onClick={() => setShowPricing(false)}
-                    className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+                    className="absolute right-8 top-8 z-50 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                       <line x1="18" y1="6" x2="6" y2="18"></line>

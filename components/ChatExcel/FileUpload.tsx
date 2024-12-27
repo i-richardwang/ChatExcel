@@ -50,7 +50,7 @@ export function FileUpload({
   }, [onFileUpload]);
 
   return (
-    <div className="w-full max-w-sm py-6 px-4">
+    <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-xl p-6">
       <div className="space-y-2">
         <h3 className="font-medium text-lg">Excel Files</h3>
         <p className="text-sm text-muted-foreground">
@@ -94,7 +94,7 @@ export function FileUpload({
       </div>
 
       {files.length > 0 && (
-        <div className="mt-6 border rounded-xl overflow-hidden bg-white dark:bg-neutral-800">
+        <div className="mt-6 border rounded-xl overflow-hidden">
           <Table>
             <TableBody>
               {files.map((file) => (

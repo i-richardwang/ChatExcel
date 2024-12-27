@@ -9,6 +9,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@clerk/nextjs';
 import Pricing from "@/components/Pricing";
 import { AnimatePresence, motion } from "framer-motion";
+import { Button } from '@/components/ui/button';
+import { FileUp } from 'lucide-react';
 
 export function ChatExcelSection() {
   const {
@@ -35,6 +37,7 @@ export function ChatExcelSection() {
 
   const [showPricing, setShowPricing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isFilesPanelOpen, setIsFilesPanelOpen] = useState(true);
   const dragCounterRef = useRef(0);
 
   // 在组件加载时检查配额
@@ -42,51 +45,37 @@ export function ChatExcelSection() {
     refreshQuota();
   }, [refreshQuota]);
 
-  // 文件拖拽处理
-  const handleDragEnter = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounterRef.current++;
-    if (e.dataTransfer.types.includes('Files')) {
-      setIsDragging(true);
-    }
-  }, []);
+  // 处理点击外部关闭
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // 只有在有文件的情况下，才允许点击外部关闭
+      if (uploadedFiles.length > 0) {
+        const target = event.target as HTMLElement;
+        // 排除文件面板本身、切换按钮、输入框的点击
+        const isFilePanel = target.closest('.file-panel');
+        const isToggleButton = target.closest('.toggle-button');
+        const isTextarea = target.closest('textarea');
+        
+        if (!isFilePanel && !isToggleButton && !isTextarea) {
+          setIsFilesPanelOpen(false);
+        }
+      }
+    };
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounterRef.current--;
-    if (dragCounterRef.current === 0) {
-      setIsDragging(false);
-    }
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [uploadedFiles.length]);
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.dataTransfer.types.includes('Files')) {
-      e.dataTransfer.dropEffect = 'copy';
-    }
-  }, []);
-
-  const handleDrop = useCallback(async (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    dragCounterRef.current = 0;
-
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      await handleUpload(files);
-    }
-  }, []);
-
+  // 全局拖拽处理
   useEffect(() => {
     const handleWindowDragEnter = (e: DragEvent) => {
       e.preventDefault();
       if (e.dataTransfer?.types.includes('Files')) {
         dragCounterRef.current++;
         setIsDragging(true);
+        setIsFilesPanelOpen(true);
       }
     };
 
@@ -124,6 +113,46 @@ export function ChatExcelSection() {
     };
   }, []);
 
+  // 文件拖拽处理
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current++;
+    if (e.dataTransfer.types.includes('Files')) {
+      setIsDragging(true);
+      setIsFilesPanelOpen(true);
+    }
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current--;
+    if (dragCounterRef.current === 0) {
+      setIsDragging(false);
+    }
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.types.includes('Files')) {
+      e.dataTransfer.dropEffect = 'copy';
+    }
+  }, []);
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    dragCounterRef.current = 0;
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      await handleUpload(files);
+    }
+  }, []);
+
   // 文件上传处理
   const handleUpload = useCallback(async (files: FileList) => {
     try {
@@ -150,10 +179,16 @@ export function ChatExcelSection() {
     }
   }, [handleFileDelete, toast]);
 
+  // 根据文件状态自动控制显示
+  useEffect(() => {
+    if (uploadedFiles.length === 0) {
+      setIsFilesPanelOpen(true);
+    }
+  }, [uploadedFiles.length]);
+
   // 分析处理
   const handleAnalysis = useCallback(async (input: string) => {
     try {
-      // 检查操作配额
       const operationType = proMode ? 'pro' : 'basic';
       const { isAllowed, shouldShowPricing } = await checkQuota(operationType);
       
@@ -164,8 +199,12 @@ export function ChatExcelSection() {
         return;
       }
 
+      // 执行时关闭面板（如果有文件）
+      if (uploadedFiles.length > 0) {
+        setIsFilesPanelOpen(false);
+      }
+      
       await executeAnalysis(input, proMode);
-      // 分析完成后刷新配额
       refreshQuota();
     } catch (error) {
       toast({
@@ -174,21 +213,18 @@ export function ChatExcelSection() {
         description: error instanceof Error ? error.message : "Analysis failed, please try again"
       });
     }
-  }, [executeAnalysis, proMode, checkQuota, refreshQuota, toast]);
+  }, [executeAnalysis, proMode, checkQuota, refreshQuota, toast, uploadedFiles.length]);
 
   // Pro模式切换处理
   const handleProModeChange = useCallback(async (enabled: boolean) => {
-    // 如果是关闭 Pro Mode，直接允许
     if (!enabled) {
       setProMode(false);
       return;
     }
 
-    // 检查是否有 Pro 权限
     const hasPro = isSignedIn && basicQuota && ['pro', 'lifetime'].includes(basicQuota.subscriptionTier);
     
     if (!hasPro) {
-      // 显示 Pricing 页面
       setShowPricing(true);
       return;
     }
@@ -197,71 +233,82 @@ export function ChatExcelSection() {
   }, [isSignedIn, basicQuota?.subscriptionTier]);
 
   return (
-    <>
-      <div className="flex h-[calc(100vh-4rem)]">
-        {/* 左侧文件区域 */}
-        <div className="w-1/3 border-r flex justify-center bg-neutral-50/50 dark:bg-neutral-900/50">
-          <FileUpload
-            files={uploadedFiles}
-            onFileUpload={handleUpload}
-            onFileDelete={handleDelete}
-            isDragging={isDragging}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-          />
-        </div>
-
-        {/* 右侧分析区域 */}
-        <div className="flex-1 flex justify-center overflow-y-auto">
-          <AnalysisPanel
-            onSubmit={handleAnalysis}
-            disabled={analyzing || executing || uploadedFiles.length === 0}
-            analyzing={analyzing}
-            executing={executing}
-            proMode={proMode}
-            onProModeChange={handleProModeChange}
-            result={analysisResult}
-          />
-        </div>
+    <div className="relative h-[calc(100vh-4rem)]">
+      {/* 主要分析区域 - 固定宽度和位置 */}
+      <div className="w-full h-full flex justify-center overflow-y-auto">
+        <AnalysisPanel
+          onSubmit={handleAnalysis}
+          disabled={analyzing || executing || uploadedFiles.length === 0}
+          analyzing={analyzing}
+          executing={executing}
+          proMode={proMode}
+          onProModeChange={handleProModeChange}
+          result={analysisResult}
+          onFocus={() => setIsFilesPanelOpen(true)}
+        />
       </div>
 
+      {/* 文件侧边栏 - 绝对定位 */}
+      <div className="absolute right-0 top-0 h-full">
+        {/* 切换按钮 */}
+        {!isFilesPanelOpen && (
+          <Button
+            variant="default"
+            size="sm"
+            className="toggle-button absolute -left-10 top-1/2 -translate-y-1/2 h-32 w-10 rounded-l-lg rounded-r-none bg-[#0d9488] hover:bg-[#0d9488]/90"
+            onClick={() => setIsFilesPanelOpen(true)}
+          >
+            <FileUp className="h-4 w-4 -rotate-90" />
+          </Button>
+        )}
+
+        {/* 文件面板 */}
+        <motion.div
+          className="file-panel h-full bg-white dark:bg-neutral-900 border-l shadow-lg"
+          style={{
+            position: 'absolute',
+            right: 0,
+            width: isFilesPanelOpen ? 400 : 0,
+            overflow: 'hidden'
+          }}
+          animate={{ width: isFilesPanelOpen ? 400 : 0 }}
+          transition={{ duration: 0.15, ease: 'easeInOut' }}
+        >
+          {isFilesPanelOpen && (
+            <FileUpload
+              files={uploadedFiles}
+              onFileUpload={handleUpload}
+              onFileDelete={handleDelete}
+              isDragging={isDragging}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            />
+          )}
+        </motion.div>
+      </div>
+
+      {/* Pricing 弹窗 */}
       <AnimatePresence>
         {showPricing && (
-          <motion.div 
-            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
           >
-            <motion.div 
-              className="fixed inset-0 overflow-y-auto"
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            <motion.div
+              className="bg-background rounded-lg shadow-lg overflow-hidden"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
             >
-              <div className="min-h-full">
-                <div className="relative w-full bg-neutral-100 dark:bg-neutral-900">
-                  <button
-                    onClick={() => setShowPricing(false)}
-                    className="absolute right-8 top-8 z-50 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                    <span className="sr-only">Close</span>
-                  </button>
-                  <Pricing />
-                </div>
-              </div>
+              <Pricing onClose={() => setShowPricing(false)} />
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

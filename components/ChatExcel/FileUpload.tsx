@@ -50,9 +50,9 @@ export function FileUpload({
   }, [onFileUpload]);
 
   return (
-    <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-xl p-6">
+    <div className="w-full space-y-6">
       <div className="space-y-2">
-        <h3 className="font-medium text-lg">Excel Files</h3>
+        <h3 className="font-medium text-lg text-neutral-800 dark:text-neutral-200">Excel Files</h3>
         <p className="text-sm text-muted-foreground">
           Upload your Excel or CSV files here
         </p>
@@ -60,9 +60,10 @@ export function FileUpload({
 
       <div
         className={cn(
-          "mt-6 border-2 border-dashed rounded-xl h-[200px] transition-colors duration-200",
+          "border-2 border-dashed rounded-xl h-[200px] transition-colors duration-200",
           "flex flex-col items-center justify-center gap-4 p-6",
-          isDragging ? "border-[#0d9488] bg-[#0d9488]/5" : "border-neutral-200 dark:border-neutral-800",
+          "bg-white dark:bg-neutral-800",
+          isDragging ? "border-[#0d9488] bg-[#0d9488]/5" : "border-neutral-200 dark:border-neutral-700",
           "hover:border-[#0d9488] hover:bg-[#0d9488]/5"
         )}
         onDragEnter={onDragEnter}
@@ -84,7 +85,7 @@ export function FileUpload({
           isDragging ? "text-[#0d9488]" : "text-neutral-400"
         )} />
         <div className="text-center">
-          <p className="font-medium mb-1">
+          <p className="font-medium mb-1 text-neutral-800 dark:text-neutral-200">
             Drop files here or click to upload
           </p>
           <p className="text-sm text-muted-foreground">
@@ -94,22 +95,22 @@ export function FileUpload({
       </div>
 
       {files.length > 0 && (
-        <div className="mt-6 border rounded-xl overflow-hidden">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700">
           <Table>
             <TableBody>
               {files.map((file) => (
-                <TableRow key={file.name} className="hover:bg-muted/30">
-                  <TableCell className="flex items-center gap-3">
-                    <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">
+                <TableRow key={file.name} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+                  <TableCell className="flex items-start gap-3 py-4">
+                    <FileText className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <div className="font-medium truncate text-neutral-800 dark:text-neutral-200">
                         {file.name}
                       </div>
                       <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                        <Badge variant="secondary" className="font-normal bg-muted/30 hover:bg-muted/50">
+                        <Badge variant="secondary" className="font-normal bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700">
                           {(file.size / 1024).toFixed(1)} KB
                         </Badge>
-                        <Badge variant="secondary" className="font-normal bg-muted/30 hover:bg-muted/50">
+                        <Badge variant="secondary" className="font-normal bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700">
                           {Object.keys(file.dtypes).length} columns
                         </Badge>
                       </div>
@@ -117,7 +118,7 @@ export function FileUpload({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 shadow-none hover:bg-muted/50"
+                      className="h-8 w-8 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 mt-1"
                       onClick={() => onFileDelete(file.name)}
                     >
                       <X className="h-4 w-4" />

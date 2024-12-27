@@ -16,7 +16,11 @@ import { FaStar } from "react-icons/fa";
 import ButtonCheckout from "./ButtonCheckout";
 import useWindowSize from "@/lib/hooks/use-window-size";
 
-const Pricing = () => {
+interface PricingProps {
+  onClose?: () => void;
+}
+
+const Pricing = ({ onClose }: PricingProps) => {
   const [isMonthly, setIsMonthly] = useState(true);
   const { isDesktop } = useWindowSize();
 
@@ -27,6 +31,29 @@ const Pricing = () => {
   return (
     <section className="bg-neutral-100 dark:bg-neutral-900 overflow-hidden" id="pricing">
       <div className="py-8 md:py-16 px-8 max-w-7xl mx-auto">
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute right-8 top-8 p-2 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6"
+            >
+              <path d="M18 6L6 18" />
+              <path d="M6 6l12 12" />
+            </svg>
+          </button>
+        )}
+
         <div className="flex flex-col text-center w-full mb-12">
           <p className="text-sm font-semibold tracking-wider text-green-500 mb-4">
             PRICING

@@ -36,7 +36,7 @@ interface AnalysisPanelProps {
   executing?: boolean;
   proMode?: boolean;
   onProModeChange?: (enabled: boolean) => void;
-  result?: string;
+  result?: AnalysisResult | null;
   onFocus?: () => void;
 }
 

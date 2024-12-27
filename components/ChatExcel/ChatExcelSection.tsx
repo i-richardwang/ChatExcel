@@ -38,12 +38,21 @@ export function ChatExcelSection() {
   const [showPricing, setShowPricing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isFilesPanelOpen, setIsFilesPanelOpen] = useState(true);
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
   const dragCounterRef = useRef(0);
 
   // 在组件加载时检查配额
   useEffect(() => {
     refreshQuota();
   }, [refreshQuota]);
+
+  // 处理面板打开状态变化
+  useEffect(() => {
+    if (isFilesPanelOpen) {
+      // 面板打开时立即隐藏按钮
+      setIsButtonVisible(false);
+    }
+  }, [isFilesPanelOpen]);
 
   // 处理点击外部关闭
   useEffect(() => {
@@ -183,6 +192,7 @@ export function ChatExcelSection() {
   useEffect(() => {
     if (uploadedFiles.length === 0) {
       setIsFilesPanelOpen(true);
+      setIsButtonVisible(false);
     }
   }, [uploadedFiles.length]);
 
@@ -248,33 +258,68 @@ export function ChatExcelSection() {
         />
       </div>
 
-      {/* 文件侧边栏 - 绝对定位 */}
+      {/* 文件上传区域 - 绝对定位 */}
       <div className="absolute right-0 top-0 h-full">
         {/* 切换按钮 */}
-        {!isFilesPanelOpen && (
-          <Button
-            variant="default"
-            size="sm"
-            className="toggle-button absolute -left-10 top-1/2 -translate-y-1/2 h-32 w-10 rounded-l-lg rounded-r-none bg-[#0d9488] hover:bg-[#0d9488]/90"
-            onClick={() => setIsFilesPanelOpen(true)}
-          >
-            <FileUp className="h-4 w-4 -rotate-90" />
-          </Button>
-        )}
+        <AnimatePresence mode="wait">
+          {!isFilesPanelOpen && isButtonVisible && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute -left-10 top-[200px] z-30"
+            >
+              <Button
+                variant="default"
+                size="sm"
+                className="toggle-button h-32 w-10 rounded-l-lg rounded-r-none bg-[#0d9488] hover:bg-[#0d9488]/90"
+                onClick={() => setIsFilesPanelOpen(true)}
+              >
+                <FileUp className="h-4 w-4 -rotate-90" />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* 文件面板 */}
         <motion.div
-          className="file-panel h-full bg-white dark:bg-neutral-900 border-l shadow-lg"
+          className="file-panel h-full bg-transparent"
           style={{
             position: 'absolute',
             right: 0,
             width: isFilesPanelOpen ? 400 : 0,
-            overflow: 'hidden'
+            overflow: 'hidden',
+            paddingTop: '120px',
           }}
-          animate={{ width: isFilesPanelOpen ? 400 : 0 }}
-          transition={{ duration: 0.15, ease: 'easeInOut' }}
+          initial={false}
+          animate={{ 
+            width: isFilesPanelOpen ? 400 : 0,
+            opacity: isFilesPanelOpen ? 1 : 0,
+          }}
+          transition={{ 
+            duration: 0.3,
+            ease: 'easeInOut',
+          }}
+          onAnimationComplete={() => {
+            // 动画完成后，如果面板已关闭，更新状态以显示按钮
+            if (!isFilesPanelOpen) {
+              setIsButtonVisible(true);
+            }
+          }}
         >
-          {isFilesPanelOpen && (
+          {/* 使用另一个motion.div来处理内容的动画 */}
+          <motion.div
+            animate={{ 
+              x: isFilesPanelOpen ? 0 : 100,
+              opacity: isFilesPanelOpen ? 1 : 0,
+            }}
+            transition={{ 
+              duration: 0.3,
+              ease: 'easeInOut',
+            }}
+            className="pr-6"
+          >
             <FileUpload
               files={uploadedFiles}
               onFileUpload={handleUpload}
@@ -285,7 +330,7 @@ export function ChatExcelSection() {
               onDragOver={handleDragOver}
               onDrop={handleDrop}
             />
-          )}
+          </motion.div>
         </motion.div>
       </div>
 

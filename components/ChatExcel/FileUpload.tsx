@@ -100,7 +100,7 @@ export function FileUpload({
             <TableBody>
               {files.map((file) => (
                 <TableRow key={file.name} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
-                  <TableCell className="flex items-start gap-3 py-4">
+                  <TableCell className="flex items-start gap-3 py-2">
                     <FileText className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="font-medium truncate text-neutral-800 dark:text-neutral-200">

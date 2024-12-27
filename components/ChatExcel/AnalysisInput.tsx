@@ -17,6 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { SubmitButton } from "./SubmitButton";
+import { motion, AnimatePresence } from "framer-motion";
 
 const EXAMPLE_PROMPTS = [
   {
@@ -248,29 +249,53 @@ export function AnalysisInput({
             </div>
           </div>
 
-          {isDragging && (
-            <div 
-              className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-            >
-              <div className="fixed inset-x-0 top-[40%] max-w-3xl mx-auto px-4">
-                <div className="h-[160px] border-2 border-dashed border-[#0d9488]/50 rounded-[4px] bg-[#0d9488]/5 flex items-center justify-center">
-                  <div className="flex flex-col items-center gap-4 text-center px-4">
-                    <Upload className="h-10 w-10 text-[#0d9488]/60" />
-                    <div>
-                      <p className="text-lg font-medium text-[#0d9488]">Drop files here</p>
-                      <p className="text-sm text-muted-foreground">
-                        Support Excel or CSV files, up to 5 files, max 100MB total
-                      </p>
+          <AnimatePresence>
+            {isDragging && (
+              <motion.div 
+                className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+              >
+                <motion.div 
+                  className="fixed inset-x-0 top-[40%] max-w-3xl mx-auto px-4"
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  transition={{ duration: 0.15, delay: 0.1 }}
+                >
+                  <motion.div 
+                    className="h-[160px] border-2 border-dashed border-[#0d9488]/50 rounded-[4px] bg-[#0d9488]/5 flex items-center justify-center"
+                  >
+                    <div className="flex flex-col items-center gap-4 text-center px-4">
+                      <motion.div
+                        initial={{ y: 10 }}
+                        animate={{ y: 0 }}
+                        transition={{ duration: 0.2, delay: 0.1 }}
+                      >
+                        <Upload className="h-10 w-10 text-[#0d9488]/60" />
+                      </motion.div>
+                      <motion.div
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.2, delay: 0.2 }}
+                      >
+                        <p className="text-lg font-medium text-[#0d9488]">Drop files here</p>
+                        <p className="text-sm text-muted-foreground">
+                          Support Excel or CSV files, up to 5 files, max 100MB total
+                        </p>
+                      </motion.div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="max-w-2xl mx-auto mt-8">
             <div className="flex items-start gap-4">

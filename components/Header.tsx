@@ -158,7 +158,7 @@ const Header = () => {
           }}
           transition={{ duration: 0.15 }}
         >
-          <ButtonSignin extraStyle="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-foreground rounded-full border border-gray-300" />
+          <ButtonSignin extraStyle="btn btn-outline rounded-full h-12 px-8" />
           <ButtonTry extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
         </motion.div>
 
@@ -271,7 +271,7 @@ const Header = () => {
               </div>
               <div className="divider" />
               <div className="flex flex-col gap-4">
-                <ButtonSignin extraStyle="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-foreground rounded-full border border-gray-300" />
+                <ButtonSignin extraStyle="btn btn-outline rounded-full h-12 px-8" />
                 <ButtonTry extraStyle="bg-[hsl(142.1,76.2%,36.3%)] hover:bg-[hsl(142.1,76.2%,36.3%)]/90 text-white rounded-full border-0" />
               </div>
             </div>

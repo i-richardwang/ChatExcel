@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 // See https://shipfa.st/docs/tutorials/private-page
 export default async function Dashboard() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-stone-50 dark:bg-background">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">

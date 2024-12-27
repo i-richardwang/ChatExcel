@@ -95,9 +95,8 @@ const Hero = () => {
             ) : (
               <>
                 <ButtonSignin extraStyle={cn(
-                  "bg-transparent text-foreground shadow hover:bg-gray-100 dark:hover:bg-gray-800",
-                  "group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-8 py-2 text-base font-semibold tracking-tighter",
-                  "transform-gpu ring-offset-current transition-all duration-200 hover:ring-2 hover:ring-primary hover:ring-offset-2"
+                  "btn btn-outline rounded-full",
+                  "h-12 px-8"
                 )} />
                 <ButtonTry extraStyle={cn(
                   "bg-black text-white shadow hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90",

@@ -256,7 +256,7 @@ export function useChatExcel() {
         const fileExt = file.name.toLowerCase().split('.').pop();
         
         if (!['csv', 'xlsx', 'xls'].includes(fileExt || '')) {
-          throw new Error('只支持 CSV 或 Excel 文���格式');
+          throw new Error('只支持 CSV 或 Excel 文件格式');
         }
 
         const dtypes = fileExt === 'csv' 
@@ -385,7 +385,6 @@ export function useChatExcel() {
       setExecuting(true);
       let output = '';
       let charts: AnalysisResult['charts'] = [];
-      let outputFile: AnalysisResult['outputFile'] | undefined;
 
       try {
         // 确保所有文件都写入到 Pyodide 文件系统
@@ -428,7 +427,7 @@ export function useChatExcel() {
         const stderr = await pyodide.runPythonAsync('sys.stderr.getvalue()');
         output = stdout + stderr;
 
-        // 检查是否有 matplotlib 图表
+        // 检查是否�� matplotlib 图表
         const hasMplFigure = await pyodide.runPythonAsync('plt.get_fignums()');
         if (hasMplFigure.length > 0) {
           const base64Data = await pyodide.runPythonAsync(`

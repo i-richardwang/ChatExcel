@@ -178,12 +178,12 @@ export function AnalysisInput({
       className="w-full max-w-4xl mx-auto h-full flex items-center"
       ref={dropzoneRef}
     >
-      <div className="w-full space-y-6">
-        <h1 className="text-4xl font-normal text-center">
+      <div className="w-full space-y-10">
+        <h1 className="text-4xl font-normal text-center mb-8">
           What data would you like to process today?
         </h1>
 
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-6">
           <div className="border rounded-[4px] focus-within:border-[#0d9488] transition-colors overflow-hidden bg-white">
             <Textarea
               value={input}
@@ -272,7 +272,7 @@ export function AnalysisInput({
             </div>
           )}
 
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto mt-8">
             <div className="flex items-start gap-4">
               <div className="hidden md:flex items-center gap-2 text-sm font-medium text-[#0d9488] shrink-0">
                 <Sparkles className="h-4 w-4 text-[#0d9488]" />
@@ -296,7 +296,7 @@ export function AnalysisInput({
           </div>
 
           {files.length > 0 && (
-            <div className="border rounded-[4px] overflow-hidden bg-white">
+            <div className="border rounded-[4px] overflow-hidden bg-white mt-8">
               <div className="px-4 py-3 border-b">
                 <h3 className="font-medium">Uploaded Files</h3>
               </div>

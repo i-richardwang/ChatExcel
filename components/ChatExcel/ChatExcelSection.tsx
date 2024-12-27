@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AnalysisInput } from './AnalysisInput';
 import { ExecutionResult } from './ExecutionResult';
-import { UsageQuota } from './UsageQuota';
 import { useChatExcel } from '@/hooks/use-chatexcel';
 import { useQuota } from '@/hooks/use-quota';
 import { useToast } from '@/hooks/use-toast';
@@ -123,7 +122,7 @@ export function ChatExcelSection() {
         <div className="flex-1 overflow-auto">
           <div className="max-w-[1800px] w-[90%] mx-auto py-8">
             {/* 配额显示 */}
-            <div className="max-w-3xl mx-auto mb-8">
+            {/* <div className="max-w-3xl mx-auto mb-8">
               {basicQuota && (
                 <UsageQuota
                   basicQuota={basicQuota}
@@ -131,7 +130,7 @@ export function ChatExcelSection() {
                   isProMode={proMode}
                 />
               )}
-            </div>
+            </div> */}
 
             <AnalysisInput
               onSubmit={handleAnalysis}

@@ -1,5 +1,9 @@
 import ButtonAccount from "@/components/ButtonAccount";
 import { ChatExcelSection } from "@/components/chatexcel/ChatExcelSection";
+import Link from "next/link";
+import Image from "next/image";
+import logo from "@/app/icon.svg";
+import config from "@/config";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +13,29 @@ export const dynamic = "force-dynamic";
 export default async function Dashboard() {
   return (
     <main className="min-h-screen">
-      <div className="flex justify-end p-4">
-        <ButtonAccount />
-      </div>
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link
+              className="flex items-center gap-3 shrink-0"
+              href="/"
+              title={`${config.appName} homepage`}
+            >
+              <Image
+                src={logo}
+                alt={`${config.appName} logo`}
+                className="w-8 h-8"
+                priority={true}
+                width={32}
+                height={32}
+              />
+              <span className="font-bold text-xl">{config.appName}</span>
+            </Link>
+            
+            <ButtonAccount />
+          </div>
+        </div>
+      </header>
       <ChatExcelSection />
     </main>
   );

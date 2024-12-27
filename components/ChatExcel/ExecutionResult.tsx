@@ -171,15 +171,15 @@ export function ExecutionResult({
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto mt-8">
-      <div className="space-y-4">
+    <div className="w-full max-w-3xl mx-auto mt-12">
+      <div className="space-y-6">
         <div className="flex items-center gap-2">
           <Code className="h-4 w-4 text-[#0d9488]" />
-          <h2 className="text-base font-medium">Analysis Result</h2>
+          <h2 className="text-lg font-medium">Analysis Result</h2>
         </div>
 
         {result?.outputFiles && result.outputFiles.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 p-4 border rounded-[4px] bg-muted/30">
+          <div className="flex flex-wrap items-center gap-3 p-4 border rounded-[4px] bg-muted/30">
             {result.outputFiles.map((file, index) => (
               <Button
                 key={index}
@@ -198,9 +198,9 @@ export function ExecutionResult({
           </div>
         )}
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {executing ? (
-            <div className="flex items-center justify-center h-32 border rounded-[4px] bg-background">
+            <div className="flex items-center justify-center h-40 border rounded-[4px] bg-background">
               <div className="animate-spin">
                 <svg
                   className="h-8 w-8 text-muted-foreground"
@@ -225,10 +225,10 @@ export function ExecutionResult({
               </div>
             </div>
           ) : result ? (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* 需要更多信息 */}
               {result.status === 'need_more_info' && (
-                <Alert variant="default" className="border rounded-[4px]">
+                <Alert variant="default" className="border rounded-[4px] p-6">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
                     {result.message || 'Need more information to process. Please provide more details.'}
@@ -238,7 +238,7 @@ export function ExecutionResult({
 
               {/* 超出范围 */}
               {result.status === 'out_of_scope' && (
-                <Alert variant="destructive" className="rounded-[4px]">
+                <Alert variant="destructive" className="rounded-[4px] p-6">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
                     {result.message || 'Sorry, your request is out of the system scope.'}
@@ -248,7 +248,7 @@ export function ExecutionResult({
 
               {/* 错误信息 */}
               {result.status === 'error' && result.error && (
-                <Alert variant="destructive" className="rounded-[4px]">
+                <Alert variant="destructive" className="rounded-[4px] p-6">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>{result.error}</AlertDescription>
                 </Alert>
@@ -257,7 +257,7 @@ export function ExecutionResult({
               {/* 输出内容 */}
               {result.output && (
                 <div className="border rounded-[4px] bg-muted/30">
-                  <pre className="p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words max-h-[500px] overflow-y-auto">
+                  <pre className="p-6 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words max-h-[500px] overflow-y-auto">
                     {result.output}
                   </pre>
                 </div>
@@ -265,7 +265,7 @@ export function ExecutionResult({
 
               {/* 图表展示 */}
               {result.charts?.map((chart, index) => (
-                <div key={index} className="-mx-[max(0px,calc((100vw-48rem)/2))]">
+                <div key={index} className="-mx-[max(0px,calc((100vw-48rem)/2))] mt-8">
                   <div className="max-w-3xl mx-auto space-y-2">
                     <div className="flex justify-end">
                       {renderSizeControls(index)}

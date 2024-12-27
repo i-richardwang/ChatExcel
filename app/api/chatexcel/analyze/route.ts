@@ -4,6 +4,8 @@ import { headers } from 'next/headers'
 import { auth } from '@clerk/nextjs/server'
 import type { AnalysisRequest, ApiResponse, AssistantResponse } from '@/types/chatexcel'
 
+export const runtime = "edge";
+
 // 获取客户端IP
 function getClientIp(headers: Headers): string {
   const cfIp = headers.get('cf-connecting-ip');

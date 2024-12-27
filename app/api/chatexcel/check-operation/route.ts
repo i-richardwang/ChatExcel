@@ -3,6 +3,8 @@ import { SupabaseClient } from '@supabase/supabase-js'
 import { headers } from 'next/headers'
 import { auth } from '@clerk/nextjs/server';
 
+export const runtime = "edge";
+
 // 获取客户端IP
 function getClientIp(headers: Headers): string {
   // 优先从 Cloudflare 或其他CDN的headers中获取

@@ -11,6 +11,8 @@ export const metadata = getSEOTags({
   canonicalUrlRelative: "/blog",
 });
 
+export const runtime = "edge";
+
 export default async function Blog() {
   const articlesToDisplay = articles
     .sort(

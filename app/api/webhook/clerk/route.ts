@@ -4,6 +4,8 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { SupabaseClient } from '@supabase/supabase-js'
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
   // 获取 webhook 签名信息
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET

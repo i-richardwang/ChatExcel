@@ -3,6 +3,8 @@ import { auth } from '@clerk/nextjs/server';
 import { createCustomerPortal } from "@/libs/stripe";
 import { SupabaseClient } from "@supabase/supabase-js";
 
+export const runtime = "edge";
+
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth();

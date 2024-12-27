@@ -4,7 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import { useQuota } from '@/hooks/use-quota';
 import { useState } from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Pricing } from "@/components/Pricing";
+import Pricing from "@/components/Pricing";
 
 interface SubmitButtonProps {
   onSubmit: () => Promise<void>;

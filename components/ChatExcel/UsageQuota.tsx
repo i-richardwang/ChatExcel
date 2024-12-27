@@ -7,6 +7,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Info } from "lucide-react";
+import { cn } from "@/libs/utils";
 
 interface QuotaInfo {
   remainingQuota: number;
@@ -81,8 +82,15 @@ export function UsageQuota({ basicQuota, proQuota, isProMode }: UsageQuotaProps)
       </div>
       <Progress 
         value={percentageUsed} 
-        className="h-2"
-        indicatorClassName={getProgressColor()}
+        className={cn(
+          "h-2",
+          "[&>div]:transition-colors",
+          {
+            "[&>div]:bg-red-500": percentageUsed >= 90,
+            "[&>div]:bg-yellow-500": percentageUsed >= 70 && percentageUsed < 90,
+            "[&>div]:bg-green-500": percentageUsed < 70,
+          }
+        )}
       />
       {percentageUsed >= 90 && (
         <p className="text-sm text-red-500">

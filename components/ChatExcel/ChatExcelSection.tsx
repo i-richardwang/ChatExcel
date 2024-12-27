@@ -1,13 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { AnalysisInput } from './AnalysisInput';
-import { ExecutionResult } from './ExecutionResult';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { FileUpload } from './FileUpload';
+import { AnalysisPanel } from './AnalysisPanel';
 import { useChatExcel } from '@/hooks/use-chatexcel';
 import { useQuota } from '@/hooks/use-quota';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@clerk/nextjs';
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Pricing from "@/components/Pricing";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -35,11 +34,95 @@ export function ChatExcelSection() {
   const { isSignedIn } = useUser();
 
   const [showPricing, setShowPricing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragCounterRef = useRef(0);
 
   // 在组件加载时检查配额
   useEffect(() => {
     refreshQuota();
   }, [refreshQuota]);
+
+  // 文件拖拽处理
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current++;
+    if (e.dataTransfer.types.includes('Files')) {
+      setIsDragging(true);
+    }
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current--;
+    if (dragCounterRef.current === 0) {
+      setIsDragging(false);
+    }
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.types.includes('Files')) {
+      e.dataTransfer.dropEffect = 'copy';
+    }
+  }, []);
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    dragCounterRef.current = 0;
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      await handleUpload(files);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleWindowDragEnter = (e: DragEvent) => {
+      e.preventDefault();
+      if (e.dataTransfer?.types.includes('Files')) {
+        dragCounterRef.current++;
+        setIsDragging(true);
+      }
+    };
+
+    const handleWindowDragLeave = (e: DragEvent) => {
+      e.preventDefault();
+      dragCounterRef.current--;
+      if (dragCounterRef.current === 0) {
+        setIsDragging(false);
+      }
+    };
+
+    const handleWindowDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      if (e.dataTransfer?.types.includes('Files')) {
+        e.dataTransfer.dropEffect = 'copy';
+      }
+    };
+
+    const handleWindowDrop = (e: DragEvent) => {
+      e.preventDefault();
+      dragCounterRef.current = 0;
+      setIsDragging(false);
+    };
+
+    window.addEventListener('dragenter', handleWindowDragEnter);
+    window.addEventListener('dragleave', handleWindowDragLeave);
+    window.addEventListener('dragover', handleWindowDragOver);
+    window.addEventListener('drop', handleWindowDrop);
+
+    return () => {
+      window.removeEventListener('dragenter', handleWindowDragEnter);
+      window.removeEventListener('dragleave', handleWindowDragLeave);
+      window.removeEventListener('dragover', handleWindowDragOver);
+      window.removeEventListener('drop', handleWindowDrop);
+    };
+  }, []);
 
   // 文件上传处理
   const handleUpload = useCallback(async (files: FileList) => {
@@ -115,36 +198,32 @@ export function ChatExcelSection() {
 
   return (
     <>
-      <div className="flex flex-col min-h-[calc(100vh-4rem)]">
-        <div className="flex-1 overflow-auto">
-          <div className="max-w-[1800px] w-[90%] mx-auto py-8">
-            {/* 配额显示 */}
-            {/* <div className="max-w-3xl mx-auto mb-8">
-              {basicQuota && (
-                <UsageQuota
-                  basicQuota={basicQuota}
-                  proQuota={proQuota}
-                  isProMode={proMode}
-                />
-              )}
-            </div> */}
+      <div className="flex h-[calc(100vh-4rem)]">
+        {/* 左侧文件区域 */}
+        <div className="w-1/3 border-r flex justify-center bg-neutral-50/50 dark:bg-neutral-900/50">
+          <FileUpload
+            files={uploadedFiles}
+            onFileUpload={handleUpload}
+            onFileDelete={handleDelete}
+            isDragging={isDragging}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          />
+        </div>
 
-            <AnalysisInput
-              onSubmit={handleAnalysis}
-              onFileUpload={handleUpload}
-              onFileDelete={handleDelete}
-              files={uploadedFiles}
-              disabled={analyzing || executing}
-              analyzing={analyzing}
-              proMode={proMode}
-              onProModeChange={handleProModeChange}
-            />
-
-            <ExecutionResult
-              result={analysisResult}
-              executing={executing}
-            />
-          </div>
+        {/* 右侧分析区域 */}
+        <div className="flex-1 flex justify-center overflow-y-auto">
+          <AnalysisPanel
+            onSubmit={handleAnalysis}
+            disabled={analyzing || executing || uploadedFiles.length === 0}
+            analyzing={analyzing}
+            executing={executing}
+            proMode={proMode}
+            onProModeChange={handleProModeChange}
+            result={analysisResult}
+          />
         </div>
       </div>
 

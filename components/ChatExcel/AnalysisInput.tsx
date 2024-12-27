@@ -175,17 +175,100 @@ export function AnalysisInput({
   }, []);
 
   return (
-    <div 
-      className="w-full max-w-4xl mx-auto h-full flex items-center"
-      ref={dropzoneRef}
-    >
-      <div className="w-full space-y-10">
-        <h1 className="text-4xl font-normal text-center mb-8">
-          What data would you like to process today?
-        </h1>
+    <div className="flex h-[calc(100vh-4rem)]">
+      {/* 左侧文件区域 */}
+      <div className="w-1/3 border-r flex justify-center">
+        <div className="w-full max-w-sm py-6 px-4">
+          <div className="space-y-2">
+            <h3 className="font-medium text-lg">Excel Files</h3>
+            <p className="text-sm text-muted-foreground">
+              Upload your Excel or CSV files here
+            </p>
+          </div>
 
-        <div className="max-w-3xl mx-auto space-y-6">
-          <div className="border rounded-[4px] focus-within:border-[#0d9488] transition-colors overflow-hidden bg-white">
+          <div
+            ref={dropzoneRef}
+            className={cn(
+              "mt-6 border-2 border-dashed rounded-xl h-[200px] transition-colors duration-200",
+              "flex flex-col items-center justify-center gap-4 p-6",
+              isDragging ? "border-[#0d9488] bg-[#0d9488]/5" : "border-neutral-200 dark:border-neutral-800",
+              "hover:border-[#0d9488] hover:bg-[#0d9488]/5"
+            )}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onClick={handleFileClick}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              className="hidden"
+              accept=".csv,.xlsx,.xls"
+              multiple
+              onChange={handleFileChange}
+            />
+            <Upload className={cn(
+              "w-10 h-10 transition-colors duration-200",
+              isDragging ? "text-[#0d9488]" : "text-neutral-400"
+            )} />
+            <div className="text-center">
+              <p className="font-medium mb-1">
+                Drop files here or click to upload
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Support Excel or CSV files
+              </p>
+            </div>
+          </div>
+
+          {files.length > 0 && (
+            <div className="mt-6 border rounded-xl overflow-hidden bg-white dark:bg-neutral-800">
+              <Table>
+                <TableBody>
+                  {files.map((file) => (
+                    <TableRow key={file.name} className="hover:bg-muted/30">
+                      <TableCell className="flex items-center gap-3">
+                        <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium truncate">
+                            {file.name}
+                          </div>
+                          <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                            <Badge variant="secondary" className="font-normal bg-muted/30 hover:bg-muted/50">
+                              {(file.size / 1024).toFixed(1)} KB
+                            </Badge>
+                            <Badge variant="secondary" className="font-normal bg-muted/30 hover:bg-muted/50">
+                              {Object.keys(file.dtypes).length} columns
+                            </Badge>
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 shadow-none hover:bg-muted/50"
+                          onClick={() => onFileDelete(file.name)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 右侧分析区域 */}
+      <div className="flex-1 flex justify-center">
+        <div className="w-full max-w-2xl py-6 px-4">
+          <h1 className="text-4xl font-normal text-center mb-8">
+            What would you like to analyze?
+          </h1>
+
+          <div className="border rounded-[4px] focus-within:border-[#0d9488] transition-colors overflow-hidden bg-white dark:bg-neutral-800">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -194,110 +277,27 @@ export function AnalysisInput({
               disabled={analyzing}
               className="min-h-[120px] resize-none border-0 focus-visible:ring-0 bg-transparent px-4 py-4 shadow-none text-lg"
             />
-            <div className="px-2 py-2 flex items-center justify-between">
+            <div className="px-2 py-2 flex items-center justify-between border-t">
               <div className="flex items-center gap-2">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  className="hidden"
-                  accept=".csv,.xlsx,.xls"
-                  multiple
-                  onChange={handleFileChange}
-                />
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 shadow-none hover:bg-muted/50"
-                        onClick={handleFileClick}
-                      >
-                        <FileUp className="h-4 w-4 mr-0" />
-                        Upload Files
-                        {files.length > 0 && (
-                          <span className="ml-1 text-xs text-muted-foreground">
-                            ({files.length})
-                          </span>
-                        )}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Upload Excel or CSV files</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Pro Mode</span>
-                  <Switch
-                    checked={proMode}
-                    onCheckedChange={onProModeChange}
-                    disabled={analyzing}
-                    className="data-[state=checked]:bg-[#0d9488] data-[state=checked]:hover:bg-[#0d9488]/90"
-                  />
-                </div>
-                <SubmitButton
-                  onSubmit={handleSubmit}
-                  disabled={disabled}
-                  analyzing={analyzing}
-                  proMode={proMode}
-                  hasInput={!!input.trim()}
+                <span className="text-sm text-muted-foreground">Pro Mode</span>
+                <Switch
+                  checked={proMode}
+                  onCheckedChange={onProModeChange}
+                  disabled={analyzing}
+                  className="data-[state=checked]:bg-[#0d9488] data-[state=checked]:hover:bg-[#0d9488]/90"
                 />
               </div>
+              <SubmitButton
+                onSubmit={handleSubmit}
+                disabled={disabled || files.length === 0}
+                analyzing={analyzing}
+                proMode={proMode}
+                hasInput={!!input.trim()}
+              />
             </div>
           </div>
 
-          <AnimatePresence>
-            {isDragging && (
-              <motion.div 
-                className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-                onDragEnter={handleDragEnter}
-                onDragLeave={handleDragLeave}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-              >
-                <motion.div 
-                  className="fixed inset-x-0 top-[40%] max-w-3xl mx-auto px-4"
-                  initial={{ scale: 0.95, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.95, opacity: 0 }}
-                  transition={{ duration: 0.15, delay: 0.1 }}
-                >
-                  <motion.div 
-                    className="h-[160px] border-2 border-dashed border-[#0d9488]/50 rounded-[4px] bg-[#0d9488]/5 flex items-center justify-center"
-                  >
-                    <div className="flex flex-col items-center gap-4 text-center px-4">
-                      <motion.div
-                        initial={{ y: 10 }}
-                        animate={{ y: 0 }}
-                        transition={{ duration: 0.2, delay: 0.1 }}
-                      >
-                        <Upload className="h-10 w-10 text-[#0d9488]/60" />
-                      </motion.div>
-                      <motion.div
-                        initial={{ y: 10, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.2, delay: 0.2 }}
-                      >
-                        <p className="text-lg font-medium text-[#0d9488]">Drop files here</p>
-                        <p className="text-sm text-muted-foreground">
-                          Support Excel or CSV files, up to 5 files, max 100MB total
-                        </p>
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="max-w-2xl mx-auto mt-8">
+          <div className="mt-6">
             <div className="flex items-start gap-4">
               <div className="hidden md:flex items-center gap-2 text-sm font-medium text-[#0d9488] shrink-0">
                 <Sparkles className="h-4 w-4 text-[#0d9488]" />
@@ -319,44 +319,6 @@ export function AnalysisInput({
               </div>
             </div>
           </div>
-
-          {files.length > 0 && (
-            <div className="border rounded-[4px] overflow-hidden bg-white mt-8">
-              <div className="px-4 py-3 border-b">
-                <h3 className="font-medium">Uploaded Files</h3>
-              </div>
-              <Table>
-                <TableBody>
-                  {files.map((file) => (
-                    <TableRow key={file.name} className="hover:bg-muted/30">
-                      <TableCell className="flex items-center gap-3">
-                        <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
-                        <span className="font-medium truncate">
-                          {file.name}
-                        </span>
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Badge variant="secondary" className="font-normal bg-muted/30 hover:bg-muted/50">
-                            {(file.size / 1024).toFixed(1)} KB
-                          </Badge>
-                          <Badge variant="secondary" className="font-normal bg-muted/30 hover:bg-muted/50">
-                            {Object.keys(file.dtypes).length} columns
-                          </Badge>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 ml-auto shadow-none hover:bg-muted/50"
-                          onClick={() => onFileDelete(file.name)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -1,35 +1,80 @@
-# ShipFast — Typescript
+# ChatExcel - AI-Powered Excel Automation
 
-Hey maker 👋 it's Marc from [ShipFast](https://shipfa.st/docs). Let's get your startup off the ground, FAST ⚡️
+ChatExcel is a privacy-first Excel automation tool that helps business professionals save hours on repetitive Excel tasks. Simply describe what you want to do in plain English, and let our AI handle the technical details.
 
-<sub>**Watch/Star the repo to be notified when updates are pushed**</sub>
+## ✨ Key Features
 
-## Get Started
+- **🔒 Privacy First**: All processing happens in your browser - your data never leaves your device
+- **💬 Natural Language**: Describe your needs in plain English, no formulas needed
+- **⚡ Instant Results**: Transform hours of manual work into seconds
+- **👀 Preview Changes**: Review all operations before applying them
+- **📊 Comprehensive Support**: Handle everything from VLOOKUP to pivot tables
 
-1. Follow the [Get Started Tutorial](https://shipfa.st/docs) to clone the repo and run your local server 💻
+## 🛠️ Common Use Cases
 
-<sub>**Looking for the /pages router version?** Use this [documentation](https://shipfa.st/docs-old) instead</sub>
+- Merge data from multiple sheets
+- Create pivot tables and charts
+- Clean and transform data
+- Perform complex lookups
+- Generate summary reports
+- Automate repetitive tasks
 
-2. Follow the [Ship In 5 Minutes Tutorial](https://shipfa.st/docs/tutorials/ship-in-5-minutes) to learn the foundation and ship your app quickly ⚡️
+## 🚀 Getting Started
 
-## Links
+1. Visit [chatexcel.ai](https://chatexcel.ai)
+2. Sign up for a free account
+3. Upload your Excel file
+4. Describe what you want to do
+5. Review and apply changes
 
--   [📚 Documentation](https://shipfa.st/docs)
--   [📣 Updates](https://shipfast.beehiiv.com/)
--   [🧑‍💻 Discord](https://shipfa.st/dashboard)
--   [🥇 Leaderboard](https://shipfa.st/leaderboard)
+## 💻 Development
 
-## Support
+### Prerequisites
 
-Reach out to me on [Twitter](https://twitter.com/marc_louvion) or marc@shipfa.st
+- Node.js 18+
+- npm or yarn
+- Git
 
-\_
+### Local Setup
 
-Let's ship it, FAST ⚡️
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/chatexcel.git
 
-P.S.
+# Install dependencies
+npm install
 
--   Want to showcase your startups? Get your [Indie Page](https://indiepa.ge?ref=shipfast_readme) and share your entrepreneur's journey. Join 3,132 founders ⭐️
--   Don't get banned from Stripe for 1 dispute. Use [ByeDispute](https://byedispute.com/?ref=shipfast_readme) to prevent them from happenening 🛡️
--   Make your launch go viral and get your first customers with [LaunchViral](https://launchvir.al/?ref=shipfast_readme) 🚀
--   Stop paying 0.4% per Stripe invoices [Zenvoice](https://zenvoice.io/?ref=shipfast_readme) 🤕
+# Set up environment variables
+cp .env.example .env.local
+
+# Start development server
+npm run dev
+```
+
+### Tech Stack
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Clerk (Authentication)
+- Framer Motion (Animations)
+
+## 📝 License
+
+[MIT License](LICENSE)
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## 🔐 Security
+
+Your data security is our top priority. All Excel operations are performed client-side in your browser. We never store or transmit your Excel file contents to our servers.
+
+## 📧 Support
+
+For support, please email support@chatexcel.ai or visit our [Help Center](https://chatexcel.ai/help).
+
+---
+
+Built with ❤️ for Excel users everywhere

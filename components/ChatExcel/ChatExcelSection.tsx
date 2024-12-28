@@ -11,6 +11,7 @@ import Pricing from "@/components/Pricing";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from '@/components/ui/button';
 import { FileUp } from 'lucide-react';
+import { cn } from '@/libs/utils';
 
 export function ChatExcelSection() {
   const {
@@ -219,17 +220,34 @@ export function ChatExcelSection() {
   }, [isSignedIn, basicQuota?.subscriptionTier]);
 
   return (
-    <div className="h-full flex">
+    <div className="h-full flex flex-col lg:flex-row">
+      {/* 文件上传区域 - 移动端显示在顶部 */}
+      <div className="lg:hidden">
+        {isFilesPanelOpen && (
+          <div className="bg-stone-50 dark:bg-neutral-900 border-b">
+            <div className="max-w-3xl mx-auto px-4 lg:px-6 py-8">
+              <FileUpload
+                files={uploadedFiles}
+                onFileUpload={handleUpload}
+                onFileDelete={handleFileDelete}
+                isDragging={isDragging}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* 主分析区域 */}
       <motion.div 
-        className="analysis-panel flex-1 flex justify-center overflow-y-auto"
-        animate={{ 
-          marginLeft: isFilesPanelOpen ? 350 : 0 
-        }}
-        transition={{ 
-          duration: 0.3,
-          ease: 'easeInOut'
-        }}
+        className={cn(
+          "analysis-panel flex-1 flex justify-center overflow-y-auto min-w-[640px]",
+          "lg:transition-[margin] lg:duration-300 lg:ease-in-out",
+          isFilesPanelOpen && "lg:ml-[350px]"
+        )}
       >
         <AnalysisPanel
           onSubmit={handleAnalysis}
@@ -243,10 +261,10 @@ export function ChatExcelSection() {
         />
       </motion.div>
 
-      {/* 文件侧边栏 */}
+      {/* 文件侧边栏 - 桌面端显示 */}
       <motion.div
         ref={sidebarRef}
-        className="file-sidebar fixed left-0 top-0 h-full bg-stone-50 dark:bg-neutral-900"
+        className="file-sidebar fixed left-0 top-0 h-full bg-stone-50 dark:bg-neutral-900 hidden lg:block"
         animate={{ 
           x: isFilesPanelOpen ? 0 : '-100%',
         }}
@@ -284,7 +302,7 @@ export function ChatExcelSection() {
         </div>
       </motion.div>
 
-      {/* 切换按钮 */}
+      {/* 切换按钮 - 仅在桌面端显示 */}
       <AnimatePresence mode="wait">
         {!isFilesPanelOpen && (
           <motion.div
@@ -292,7 +310,7 @@ export function ChatExcelSection() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-0 top-[200px] z-30"
+            className="fixed left-0 top-[200px] z-30 hidden lg:block"
           >
             <Button
               variant="default"
@@ -305,6 +323,21 @@ export function ChatExcelSection() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 移动端的切换按钮 */}
+      <div className="lg:hidden fixed bottom-4 right-4 z-30">
+        <Button
+          variant="default"
+          size="icon"
+          className="h-12 w-12 rounded-full bg-[#0d9488] hover:bg-[#0d9488]/90 shadow-lg"
+          onClick={() => setIsFilesPanelOpen(!isFilesPanelOpen)}
+        >
+          <FileUp className={cn(
+            "h-5 w-5 transition-transform",
+            isFilesPanelOpen ? "rotate-180" : "rotate-0"
+          )} />
+        </Button>
+      </div>
 
       {/* Pricing 弹窗 */}
       <AnimatePresence>

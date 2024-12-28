@@ -11,10 +11,22 @@ import type { AnalysisResult } from '@/types/chatexcel';
 import { ExecutionResult } from './ExecutionResult';
 
 const EXAMPLE_PROMPTS = [
-  { text: "Calculate average salary by department", icon: "📊" },
-  { text: "Create sales chart by city", icon: "📈" },
-  { text: "Find duplicate customer records", icon: "🔍" },
-  { text: "Merge multiple tables into one", icon: "🔄" }
+  {
+    text: "Find customers in table1 and get their sales from table2",
+    icon: "🔍"
+  },
+  {
+    text: "Show age distribution in a histogram chart",
+    icon: "📊"
+  },
+  {
+    text: "Add profit column: (selling price - cost) / selling price",
+    icon: "💰"
+  },
+  {
+    text: "Create monthly sales pivot table by region",
+    icon: "📈"
+  }
 ] as const;
 
 interface AnalysisPanelProps {
@@ -58,8 +70,8 @@ export function AnalysisPanel({
   }, []);
 
   return (
-    <div className="w-full max-w-3xl py-10 px-6 space-y-8">
-      <h1 className="text-4xl font-normal text-center">
+    <div className="w-full max-w-3xl mx-auto py-6 lg:py-10 px-4 lg:px-6 space-y-6 lg:space-y-8">
+      <h1 className="text-3xl lg:text-4xl font-normal text-center">
         What would you like to analyze?
       </h1>
 
@@ -94,18 +106,18 @@ export function AnalysisPanel({
       </div>
 
       <div>
-        <div className="flex items-start gap-4">
+        <div className="flex flex-col md:flex-row items-start gap-4">
           <div className="hidden md:flex items-center gap-2 text-sm font-medium text-[#0d9488] shrink-0">
             <Sparkles className="h-4 w-4 text-[#0d9488]" />
             Try this
           </div>
-          <div className="grid grid-cols-2 gap-2 flex-1">
+          <div className="flex flex-wrap gap-2 flex-1">
             {EXAMPLE_PROMPTS.map((prompt, index) => (
               <Button
                 key={index}
                 variant="outline"
                 size="sm"
-                className="h-8 rounded-full shadow-none hover:bg-muted/50"
+                className="flex-shrink-0 h-8 rounded-full shadow-none hover:bg-muted/50 whitespace-nowrap"
                 onClick={() => handlePromptClick(prompt.text)}
               >
                 <span className="mr-1">{prompt.icon}</span>

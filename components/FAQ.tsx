@@ -13,16 +13,6 @@ interface FAQItemProps {
 
 const faqList: FAQItemProps[] = [
   {
-    question: "How does ChatExcel protect my data privacy?",
-    answer: (
-      <div className="space-y-2 leading-relaxed">
-        <p>
-          Your data security is our top priority. All Excel operations are performed directly in your browser - your files never leave your device. The AI only reads column headers to generate commands, ensuring complete privacy of your sensitive data.
-        </p>
-      </div>
-    ),
-  },
-  {
     question: "What types of Excel operations can I perform?",
     answer: (
       <div className="space-y-2 leading-relaxed">
@@ -39,21 +29,41 @@ const faqList: FAQItemProps[] = [
     ),
   },
   {
-    question: "What's the difference between regular AI operations and multi-step Agent operations?",
-    answer: (
-      <div className="space-y-2 leading-relaxed">
-        <p>
-          Regular AI operations are perfect for single-step tasks like creating a pivot table or performing a VLOOKUP. Multi-step Agent operations are designed for more complex scenarios that require multiple steps or logic, such as cleaning data across multiple sheets and then creating a summary visualization.
-        </p>
-      </div>
-    ),
-  },
-  {
     question: "Do I need to know Excel formulas to use ChatExcel?",
     answer: (
       <div className="space-y-2 leading-relaxed">
         <p>
           No! That's the beauty of ChatExcel. Simply describe what you want to achieve in plain English, and we'll handle the technical details. For example, instead of writing complex VLOOKUP formulas, just say "find matching values from sheet 2 and add them to sheet 1."
+        </p>
+      </div>
+    ),
+  },
+  {
+    question: "How accurate are the results?",
+    answer: (
+      <div className="space-y-2 leading-relaxed">
+        <p>
+          Our AI model is designed to provide accurate results for common Excel operations. While it performs well in most scenarios, we recommend reviewing the results, especially for critical business decisions. You can preview all changes before applying them, and our system provides clear explanations of the operations performed.
+        </p>
+      </div>
+    ),
+  },
+  {
+    question: "How does ChatExcel protect my data privacy?",
+    answer: (
+      <div className="space-y-2 leading-relaxed">
+        <p>
+          Your data security is our top priority. All Excel operations are performed directly in your browser - your files never leave your device. The AI only reads column headers to generate commands, ensuring complete privacy of your sensitive data.
+        </p>
+      </div>
+    ),
+  },
+  {
+    question: "What's the difference between regular AI operations and multi-step Agent operations?",
+    answer: (
+      <div className="space-y-2 leading-relaxed">
+        <p>
+          Regular AI operations are perfect for single-step tasks like creating a pivot table or performing a VLOOKUP. Multi-step Agent operations are designed for more complex scenarios that require multiple steps or logic, such as cleaning data across multiple sheets and then creating a summary visualization.
         </p>
       </div>
     ),

@@ -15,10 +15,10 @@ const CTA = () => {
             CALL TO ACTION
           </p>
           <h2 className="font-extrabold text-4xl md:text-5xl tracking-tight mb-6">
-            {user ? "Ready to Continue Your Work?" : "Ready to Transform Your Excel Workflow?"}
+            {user ? "Back to Your Workspace" : "Start Now - 5 Free Operations"}
           </h2>
           <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed">
-            {user ? "Your workspace is waiting for you." : "Automate your Excel tasks effortlessly."}
+            {user ? "Continue boosting your productivity" : "Try our AI-powered Excel automation risk-free"}
           </p>
           <div className="flex flex-col w-full sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
             <ButtonTry

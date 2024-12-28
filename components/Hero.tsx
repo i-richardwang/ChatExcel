@@ -48,12 +48,12 @@ const Hero = () => {
             <WordRotate
               className="text-white px-4 py-1 rounded-lg bg-gradient-to-r from-[hsl(142.1,76.2%,36.3%)] to-[hsl(142.1,76.2%,36.3%)]/80"
               words={[
+                "Formula Errors",
                 "Tedious VLOOKUP",
                 "Pivot Tables",
                 "Data Cleaning",
                 "Chart Tweaking",
-                "Formula Errors",
-                "Merge Conflicts",
+                "Complex Merging",
               ]}
             />
           </motion.h1>

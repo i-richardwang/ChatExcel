@@ -8,7 +8,7 @@ const problems = [
   },
   {
     title: "Complex Data Operations",
-    description: "Struggling with multiple spreadsheets and complicated formulas leads to errors and frustration, especially when dealing with large datasets.",
+    description: "When handling multiple spreadsheets, a single error can invalidate the entire analysis. Manual data processing is prone to mistakes and becomes increasingly risky with larger datasets.",
     icon: Brain,
   },
   {
@@ -30,7 +30,7 @@ const Problem = () => {
             Excel Tasks Shouldn't Eat Up Your Day
           </h2>
           <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed">
-            90% of business professionals waste hours weekly on manual Excel operations that could be automated
+            According to research, most business professionals spend several hours each week on repetitive Excel tasks that could be automated
           </p>
         </div>
 

@@ -11,23 +11,11 @@ import type { AnalysisResult } from '@/types/chatexcel';
 import { ExecutionResult } from './ExecutionResult';
 
 const EXAMPLE_PROMPTS = [
-  {
-    text: "Calculate average salary by department",
-    icon: "📊"
-  },
-  {
-    text: "Create sales chart by city",
-    icon: "📈"
-  },
-  {
-    text: "Find duplicate customer records",
-    icon: "🔍"
-  },
-  {
-    text: "Merge multiple tables into one",
-    icon: "🔄"
-  }
-];
+  { text: "Calculate average salary by department", icon: "📊" },
+  { text: "Create sales chart by city", icon: "📈" },
+  { text: "Find duplicate customer records", icon: "🔍" },
+  { text: "Merge multiple tables into one", icon: "🔄" }
+] as const;
 
 interface AnalysisPanelProps {
   onSubmit: (input: string) => Promise<void>;
@@ -53,8 +41,9 @@ export function AnalysisPanel({
   const [input, setInput] = useState('');
 
   const handleSubmit = useCallback(async () => {
-    if (!input.trim()) return;
-    await onSubmit(input.trim());
+    const trimmedInput = input.trim();
+    if (!trimmedInput) return;
+    await onSubmit(trimmedInput);
   }, [input, onSubmit]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {

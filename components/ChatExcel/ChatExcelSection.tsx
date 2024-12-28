@@ -35,10 +35,10 @@ export function ChatExcelSection() {
   const { toast } = useToast();
   const { isSignedIn } = useUser();
 
+  // 状态管理
   const [showPricing, setShowPricing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isFilesPanelOpen, setIsFilesPanelOpen] = useState(true);
-  const [isButtonVisible, setIsButtonVisible] = useState(false);
   const dragCounterRef = useRef(0);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -47,32 +47,20 @@ export function ChatExcelSection() {
     refreshQuota();
   }, [refreshQuota]);
 
-  // 处理面板打开状态变化
-  useEffect(() => {
-    if (isFilesPanelOpen) {
-      // 面板打开时立即隐藏按钮
-      setIsButtonVisible(false);
-    }
-  }, [isFilesPanelOpen]);
-
   // 处理点击外部关闭
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // 只有在有文件的情况下，才允许点击外部关闭
       if (uploadedFiles.length > 0) {
         const target = event.target as HTMLElement;
         
-        // 检查点击是否在侧边栏内部
         if (sidebarRef.current?.contains(target)) {
           return;
         }
 
-        // 检查是否点击了具体的交互组件
         const isInputComponent = target.closest('textarea, button, .switch-container');
         const isToggleButton = target.closest('.toggle-button');
         const isPricingModal = target.closest('.pricing-modal');
         
-        // 如果点击了这些具体组件，不关闭侧边栏
         if (isInputComponent || isToggleButton || isPricingModal) {
           return;
         }
@@ -185,27 +173,6 @@ export function ChatExcelSection() {
     }
   }, [handleFileUpload, toast]);
 
-  // 文件删除处理
-  const handleDelete = useCallback((fileName: string) => {
-    try {
-      handleFileDelete(fileName);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Delete failed",
-        description: "Failed to delete file"
-      });
-    }
-  }, [handleFileDelete, toast]);
-
-  // 根据文件状态自动控制显示
-  useEffect(() => {
-    if (uploadedFiles.length === 0) {
-      setIsFilesPanelOpen(true);
-      setIsButtonVisible(false);
-    }
-  }, [uploadedFiles.length]);
-
   // 分析处理
   const handleAnalysis = useCallback(async (input: string) => {
     try {
@@ -219,7 +186,6 @@ export function ChatExcelSection() {
         return;
       }
 
-      // 执行时关闭面板（如果有文件）
       if (uploadedFiles.length > 0) {
         setIsFilesPanelOpen(false);
       }
@@ -254,11 +220,11 @@ export function ChatExcelSection() {
 
   return (
     <div className="h-full flex">
-      {/* 主要分析区域 */}
+      {/* 主分析区域 */}
       <motion.div 
         className="analysis-panel flex-1 flex justify-center overflow-y-auto"
         animate={{ 
-          marginRight: isFilesPanelOpen ? 400 : 0 
+          marginLeft: isFilesPanelOpen ? 350 : 0 
         }}
         transition={{ 
           duration: 0.3,
@@ -280,39 +246,34 @@ export function ChatExcelSection() {
       {/* 文件侧边栏 */}
       <motion.div
         ref={sidebarRef}
-        className="file-sidebar fixed right-0 top-0 h-full bg-stone-50 dark:bg-neutral-900"
+        className="file-sidebar fixed left-0 top-0 h-full bg-stone-50 dark:bg-neutral-900"
         animate={{ 
-          x: isFilesPanelOpen ? 0 : '100%',
+          x: isFilesPanelOpen ? 0 : '-100%',
         }}
         transition={{ 
           duration: 0.3,
           ease: 'easeInOut'
         }}
         style={{
-          width: 400,
-        }}
-        onAnimationComplete={() => {
-          if (!isFilesPanelOpen) {
-            setIsButtonVisible(true);
-          }
+          width: 350,
         }}
       >
         <div className="h-full pt-[120px]">
           <motion.div
             animate={{ 
-              x: isFilesPanelOpen ? 0 : 100,
+              x: isFilesPanelOpen ? 0 : -100,
               opacity: isFilesPanelOpen ? 1 : 0,
             }}
             transition={{ 
               duration: 0.3,
               ease: 'easeInOut',
             }}
-            className="pr-12 h-full"
+            className="pl-12 pr-2 h-full"
           >
             <FileUpload
               files={uploadedFiles}
               onFileUpload={handleUpload}
-              onFileDelete={handleDelete}
+              onFileDelete={handleFileDelete}
               isDragging={isDragging}
               onDragEnter={handleDragEnter}
               onDragLeave={handleDragLeave}
@@ -331,15 +292,15 @@ export function ChatExcelSection() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed right-0 top-[200px] z-30"
+            className="fixed left-0 top-[200px] z-30"
           >
             <Button
               variant="default"
               size="sm"
-              className="toggle-button h-32 w-10 rounded-l-lg rounded-r-none bg-[#0d9488] hover:bg-[#0d9488]/90"
+              className="toggle-button h-32 w-10 rounded-r-lg rounded-l-none bg-[#0d9488] hover:bg-[#0d9488]/90"
               onClick={() => setIsFilesPanelOpen(true)}
             >
-              <FileUp className="h-4 w-4 -rotate-90" />
+              <FileUp className="h-4 w-4 rotate-90" />
             </Button>
           </motion.div>
         )}

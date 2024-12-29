@@ -51,8 +51,28 @@ export function SubmitButton({
       </Button>
 
       <Dialog open={showPricing} onOpenChange={setShowPricing}>
-        <DialogContent className="max-w-4xl">
-          <Pricing />
+        <DialogContent className="max-w-4xl relative">
+          <button
+            onClick={() => setShowPricing(false)}
+            className="absolute right-4 top-4 p-2 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors z-50"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6"
+            >
+              <path d="M18 6L6 18" />
+              <path d="M6 6l12 12" />
+            </svg>
+          </button>
+          <Pricing onClose={() => setShowPricing(false)} hideCloseButton={true} />
         </DialogContent>
       </Dialog>
     </>

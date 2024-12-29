@@ -349,12 +349,32 @@ export function ChatExcelSection() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-background rounded-lg shadow-lg overflow-hidden"
+              className="bg-background rounded-lg shadow-lg overflow-hidden relative"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
             >
-              <Pricing onClose={() => setShowPricing(false)} />
+              <button
+                onClick={() => setShowPricing(false)}
+                className="absolute right-4 top-4 p-2 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors z-50"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-6 h-6"
+                >
+                  <path d="M18 6L6 18" />
+                  <path d="M6 6l12 12" />
+                </svg>
+              </button>
+              <Pricing onClose={() => setShowPricing(false)} hideCloseButton={true} />
             </motion.div>
           </motion.div>
         )}

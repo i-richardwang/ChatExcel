@@ -18,9 +18,10 @@ import useWindowSize from "@/lib/hooks/use-window-size";
 
 interface PricingProps {
   onClose?: () => void;
+  hideCloseButton?: boolean;
 }
 
-const Pricing = ({ onClose }: PricingProps) => {
+const Pricing = ({ onClose, hideCloseButton = false }: PricingProps) => {
   const [isMonthly, setIsMonthly] = useState(true);
   const { isDesktop } = useWindowSize();
 
@@ -31,7 +32,7 @@ const Pricing = ({ onClose }: PricingProps) => {
   return (
     <section className="bg-neutral-100 dark:bg-neutral-900 overflow-hidden" id="pricing">
       <div className="py-8 md:py-16 px-8 max-w-7xl mx-auto">
-        {onClose && (
+        {!hideCloseButton && onClose && (
           <button
             onClick={onClose}
             className="absolute right-8 top-8 p-2 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"

@@ -72,7 +72,7 @@ export function AnalysisPanel({
   return (
     <div className="w-full max-w-3xl mx-auto py-6 lg:py-10 px-4 lg:px-6 space-y-6 lg:space-y-8">
       <h1 className="text-3xl lg:text-4xl font-normal text-center">
-        What would you like to analyze?
+        What would you like to do with your Excel?
       </h1>
 
       <div className="border rounded-[4px] focus-within:border-[#0d9488] transition-colors overflow-hidden bg-white dark:bg-neutral-800">
